@@ -3,6 +3,16 @@ CARDIAC VISUALISATION TECHNIQUES
 Here you will find code, data and examples related to the talk.
 
 
+SETUP AND DEPENDENCIES:
+Many of the dependencies are optional. Often the easiest way to install is to use your favourite package manager e.g. aptitude, yum, MacPorts. Alternatively, download the source from the websites and follow the instructions for installation.
+
+The code can be downloaded in zip or tar format from github.com/mattgibb/visualisation, but if you would like to keep up to date with the latest version easily, or to contribute a patch or extra tools and materials, you will need to install git (http://git-scm.com/). Further instructions are at github.com/mattgibb/visualisation.
+
+For the file converter, you will need to install:
+
+Autoconf (www.gnu.org/software/autoconf/)
+Boost (www.boost.org)
+
 FILE CONVERSION
 Once you've checked out the code, change into the 'file_converter' subdirectory and run:
 
