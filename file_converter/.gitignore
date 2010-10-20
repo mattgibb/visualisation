@@ -1,1 +1,10 @@
 configure
+autom4te.cache
+Makefile
+config.h
+config.log
+config.status
+libtool
+src/.deps
+src/Makefile
+stamp-h1
