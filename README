@@ -1,0 +1,14 @@
+CARDIAC VISUALISATION TECHNIQUES
+
+Here you will find code, data and examples related to the talk.
+
+
+FILE CONVERSION
+Once you've checked out the code, change into the 'file_converter' subdirectory and run:
+
+autoreconf
+./configure --with-vtk=/path/to/vtk --with-vtk-version=<your vtk version>
+make
+
+Where <your vtk version> is something like '-5.4'. This will build the format conversion files.
+TODO: Elaborate on this and say what to do next, how to use them etc.
