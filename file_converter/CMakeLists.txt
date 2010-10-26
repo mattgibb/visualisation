@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 2.8)
+
+PROJECT(FILE_CONVERTER)
+
+# Find Boost and add include dirs
+FIND_PACKAGE(Boost COMPONENTS program_options REQUIRED)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+
+# Find Boost and add include dirs
+FIND_PACKAGE(VTK REQUIRED)
+INCLUDE(${USE_VTK_FILE})
+
+ADD_SUBDIRECTORY(src)
+ADD_SUBDIRECTORY(test)
