@@ -1,0 +1,177 @@
+<html><title>CxxTest Releases</title>
+<h1>CxxTest Releases</h1>
+
+<h2>Version 3.10.1 (2004-12-01)</h2>
+<ul>
+<li>Improved support for VC7</li>
+<li>Fixed clash with some versions of STL</li>
+</ul>
+
+<h2>Version 3.10.0 (2004-11-20)</h2>
+<ul>
+<li>Added mock framework for global functions</li>
+<li>Added <code>TS_ASSERT_THROWS_ASSERT</code> and <code>TS_ASSERT_THROWS_EQUALS</code></li>
+<li>Added <tt>CXXTEST_ENUM_TRAITS</tt></li>
+<li>Improved support for STL classes (vector, map etc.)</li>
+<li>Added support for Digital Mars compiler</li>
+<li>Reduced root/part compilation time and binary size</li>
+<li>Support C++-style commenting of tests</li>
+</ul>
+
+<h2>Version 3.9.1 (2004-01-19)</h2>
+<ul>
+<li>Fixed small bug with runner exit code</li>
+<li>Embedded test suites are now deprecated</li>
+</ul>
+
+<h2>Version 3.9.0 (2004-01-17)</h2>
+<ul>
+<li>Added <code>TS_TRACE</code></li>
+<li>Added <tt>--no-static-init</tt></li>
+<li>CxxTest::<code>setAbortTestOnFail()</code> works even without <tt>--abort-on-fail</tt></li>
+</ul>
+
+<h2>Version 3.8.5 (2004-01-08)</h2>
+<ul>
+<li>Added <tt>--no-eh</tt></li>
+<li>Added <code>CxxTest::setAbortTestOnFail()</code> and <tt>CXXTEST_DEFAULT_ABORT</tt></li>
+<li>Added <code>CxxTest::setMaxDumpSize()</code></li>
+<li>Added StdioFilePrinter</li>
+</ul>
+
+<h2>Version 3.8.4 (2003-12-31)</h2>
+<ul>
+<li>Split distribution into cxxtest and cxxtest-selftest</li>
+<li>Added <tt>`sample/msvc/FixFiles.bat'</tt></li>
+</ul>
+
+<h2>Version 3.8.3 (2003-12-24)</h2>
+<ul>
+<li>Added <code>TS_ASSERT_PREDICATE</code></li>
+<li>Template files can now specify where to insert the preamble</li>
+<li>Added a sample Visual Studio workspace in <tt>`sample/msvc'</tt></li>
+<li>Can compile in MSVC with warning level 4</li>
+<li>Changed output format slightly</li>
+</ul>
+
+<h2>Version 3.8.1 (2003-12-21)</h2>
+<ul>
+<li>Fixed small bug when using multiple <tt>--part</tt> files.</li>
+<li>Fixed X11 GUI crash when there's no X server.</li>
+<li>Added <code>GlobalFixture::setUpWorld()</code>/<code>tearDownWorld()</code></li>
+<li>Added <code>leaveOnly()</code>, <code>activateAllTests()</code> and <tt>`sample/only.tpl'</tt></li>
+<li>Should now run without warnings on Sun compiler.</li>
+</ul>
+
+<h2>Version 3.8.0 (2003-12-13)</h2>
+<ul>
+<li>Fixed bug where <tt>`Root.cpp'</tt> needed exception handling</li>
+<li>Added <code>TS_ASSERT_RELATION</code></li>
+<li><code>TSM_</code> macros now also tell you what went wrong</li>
+<li>Renamed <code>Win32Gui::free()</code> to avoid clashes</li>
+<li>Now compatible with more versions of Borland compiler</li>
+<li>Improved the documentation</li>
+</ul>
+
+<h2>Version 3.7.1 (2003-09-29)</h2>
+<ul>
+<li>Added <tt>--version</tt></li>
+<li>Compiles with even more exotic g++ warnings</li>
+<li>Win32 Gui compiles with UNICODE</li>
+<li>Should compile on some more platforms (Sun Forte, HP aCC)</li>
+</ul>
+
+<h2>Version 3.7.0 (2003-09-20)</h2>
+<ul>
+<li>Added <code>TS_ASSERT_LESS_THAN_EQUALS</code></li>
+<li>Minor cleanups</li>
+</ul>
+
+<h2>Version 3.6.1 (2003-09-15)</h2>
+<ul>
+<li>Improved QT GUI</li>
+<li>Improved portability some more</li>
+</ul>
+
+<h2>Version 3.6.0 (2003-09-04)</h2>
+<ul>
+<li>Added <tt>--longlong</tt></li>
+<li>Some portability improvements</li>
+</ul>
+
+<h2>Version 3.5.1 (2003-09-03)</h2>
+<ul>
+<li>Major internal rewrite of macros</li>
+<li>Added <code>TS_ASSERT_SAME_DATA</code></li>
+<li>Added <tt>--include</tt> option</li>
+<li>Added <tt>--part</tt> and <tt>--root</tt> to enable splitting the test runner</li>
+<li>Added global fixtures</li>
+<li>Enhanced Win32 GUI with timers, <tt>-keep</tt> and <tt>-title</tt></li>
+<li>Now compiles with strict warnings</li>
+</ul>
+
+<h2>Version 3.1.1 (2003-08-27)</h2>
+<ul>
+<li>Fixed small bug in <code>TS_ASSERT_THROWS_*()</code></li>
+</ul>
+
+<h2>Version 3.1.0 (2003-08-23)</h2>
+<ul>
+<li>Default ValueTraits now dumps value as hex bytes</li>
+<li>Fixed double invocation bug (e.g. <code>TS_FAIL(</code><code>functionWithSideEffects()</code>))</li>
+<li><code>TS_ASSERT_THROWS*()</code> are now "abort on fail"-friendly</li>
+<li>Win32 GUI now supports Windows 98 and doesn't need comctl32.lib</li>
+</ul>
+
+<h2>Version 3.0.1 (2003-08-07)</h2>
+<ul>
+<li>Added simple GUI for X11, Win32 and Qt</li>
+<li>Added <code>TS_</code><code>WARN()</code> macro</li>
+<li>Removed <tt>--exit-code</tt></li>
+<li>Improved samples</li>
+<li>Improved support for older (pre-std::) compilers</li>
+<li>Made a PDF version of the User's Guide</li>
+</ul>
+
+<h2>Version 2.8.4 (2003-07-21)</h2>
+<ul>
+<li>Now supports g++-3.3</li>
+<li>Added <tt>--have-eh</tt></li>
+<li>Fixed bug in <code>numberToString()</code></li>
+</ul>
+
+<h2>Version 2.8.3 (2003-06-30)</h2>
+<ul>
+<li>Fixed bugs in cxxtestgen.pl</li>
+<li>Fixed warning for some compilers in ErrorPrinter/StdioPrinter</li>
+<li>Thanks Martin Jost for pointing out these problems!</li>
+</ul>
+
+<h2>Version 2.8.2 (2003-06-10)</h2>
+<ul>
+<li>Fixed bug when using <tt>CXXTEST_ABORT_TEST_ON_FAIL</tt> without standard library</li>
+<li>Added <tt>CXXTEST_USER_TRAITS</tt></li>
+<li>Added <tt>--abort-on-fail</tt></li>
+</ul>
+
+<h2>Version 2.8.1 (2003-01-16)</h2>
+<ul>
+<li>Fixed <code>charToString()</code> for negative chars</li>
+</ul>
+
+<h2>Version 2.8.0 (2003-01-13)</h2>
+<ul>
+<li>Added <tt>CXXTEST_ABORT_TEST_ON_FAIL</tt> for xUnit-like behaviour</li>
+<li>Added <tt>`sample/winddk'</tt></li>
+<li>Improved ValueTraits</li>
+<li>Improved output formatter</li>
+<li>Started version history</li>
+</ul>
+
+<h2>Version 2.7.0 (2002-09-29)</h2>
+<ul>
+<li>Added embedded test suites</li>
+<li>Major internal improvements</li>
+</ul>
+
+</html>

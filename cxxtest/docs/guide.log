@@ -1,0 +1,418 @@
+This is pdfTeXk, Version 3.1415926-1.40.9 (Web2C 7.5.7) (format=pdfetex 2008.9.22)  27 OCT 2010 18:29
+entering extended mode
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**./guide.texi
+(./guide.texi (./texinfo.tex Loading texinfo [version 2003-05-04.08]: Basics,
+\bindingoffset=\dimen16
+\normaloffset=\dimen17
+\pagewidth=\dimen18
+\pageheight=\dimen19
+\outerhsize=\dimen20
+\outervsize=\dimen21
+\cornerlong=\dimen22
+\cornerthick=\dimen23
+\topandbottommargin=\dimen24
+\headlinebox=\box16
+\footlinebox=\box17
+\margin=\insert252
+\EMsimple=\toks13
+\groupbox=\box18
+\groupinvalidhelp=\toks14
+\mil=\dimen25
+\exdentamount=\skip18
+\inmarginspacing=\skip19
+\currentparindent=\dimen26
+
+pdf,
+\tempnum=\count27
+\lnkcount=\count28
+\filename=\toks15
+\filenamelength=\count29
+\pgn=\count30
+\toksA=\toks16
+\toksB=\toks17
+\toksC=\toks18
+\toksD=\toks19
+\boxA=\box19
+\countA=\count31
+ (/usr/local/texlive/2008/texmf-dist/tex/plain/misc/pdfcolor.tex) fonts,
+\sffam=\fam8
+\textleading=\dimen27
+\mainmagstep=\count32
+\fontdepth=\count33
+
+page headings,
+\titlepagetopglue=\skip20
+\titlepagebottomglue=\skip21
+\evenheadline=\toks20
+\oddheadline=\toks21
+\evenfootline=\toks22
+\oddfootline=\toks23
+ tables,
+\tableindent=\dimen28
+\itemindent=\dimen29
+\itemmargin=\dimen30
+\itemmax=\dimen31
+\itemno=\count34
+\multitableparskip=\skip22
+\multitableparindent=\skip23
+\multitablecolspace=\dimen32
+\multitablelinespace=\skip24
+\colcount=\count35
+\savedfootnotes=\box20
+ conditionals, indexing,
+\secondaryindent=\skip25
+\partialpage=\box21
+\doublecolumnhsize=\dimen33
+ sectioning,
+\chapno=\count36
+\secno=\count37
+\subsecno=\count38
+\subsubsecno=\count39
+\appendixno=\count40
+\absseclevel=\count41
+\secbase=\count42
+\chapheadingskip=\skip26
+\secheadingskip=\skip27
+\subsecheadingskip=\skip28
+ toc,
+\tocfile=\write0
+\contentsrightmargin=\skip29
+\savepageno=\count43
+\lastnegativepageno=\count44
+\shortappendixwidth=\dimen34
+\tocindent=\dimen35
+ environments,
+\errorbox=\box22
+\lispnarrowing=\skip30
+\envskipamount=\skip31
+\circthick=\dimen36
+\cartouter=\dimen37
+\cartinner=\dimen38
+\normbskip=\skip32
+\normpskip=\skip33
+\normlskip=\skip34
+\lskip=\skip35
+\rskip=\skip36
+\tabw=\dimen39
+
+defuns,
+\defbodyindent=\skip37
+\defargsindent=\skip38
+\deflastargmargin=\skip39
+\parencount=\count45
+ macros,
+\paramno=\count46
+\macname=\toks24
+ cross references,
+\auxfile=\write1
+\savesfregister=\count47
+\footnoteno=\count48
+
+(/usr/local/texlive/2008/texmf-dist/tex/generic/epsf/epsf.tex
+This is `epsf.tex' v2.7.3 <23 July 2005>
+\epsffilein=\read1
+\epsfframemargin=\dimen40
+\epsfframethickness=\dimen41
+\epsfrsize=\dimen42
+\epsftmp=\dimen43
+\epsftsize=\dimen44
+\epsfxsize=\dimen45
+\epsfysize=\dimen46
+\pspoints=\dimen47
+)
+\noepsfhelp=\toks25
+ localization,
+\nolanghelp=\toks26
+\defaultparindent=\dimen48
+ and turning on texinfo input format.) (./guide.aux)
+@cpindfile=@write2
+@fnindfile=@write3
+@vrindfile=@write4
+@tpindfile=@write5
+@kyindfile=@write6
+@pgindfile=@write7
+ [1
+\openout1 = `guide.aux'.
+
+\openout2 = `guide.cp'.
+
+\openout3 = `guide.fn'.
+
+\openout4 = `guide.vr'.
+
+\openout5 = `guide.tp'.
+
+\openout6 = `guide.ky'.
+
+\openout7 = `guide.pg'.
+
+{/usr/local/texlive/2008/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./guid
+e.toc
+[-1] [-2]) [-3] (./guide.toc) (./guide.toc) Chapter 1
+\openout0 = `guide.toc'.
+
+ Chapter 2 [1]
+Underfull \hbox (badness 2351) in paragraph at lines 170--173
+ @texttt void (void)[] @textrm mem-ber func-tion of that class whose name start
+s with @texttt test[]@textrm , e.g.
+
+@hbox(7.60416+2.12917)x455.24408, glue set 2.86836
+.@glue(@leftskip) 21.68121
+.@texttt v
+.@texttt o
+.@texttt i
+.@texttt d
+.etc.
+
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 289--292
+ [] []@textrm Under Win-dows with Vi-sual C@texttt ++@textrm , run @texttt pyth
+on cxxtestgen []
+
+@hbox(7.60416+2.43333)x455.24408, glue set 6.66183
+.@glue(@leftskip) 21.68121
+.@hbox(0.0+0.0)x0.0
+.@glue 0.0
+.@hbox(4.86667+0.0)x0.0, glue set - 12.70244fil
+..@glue 0.0 plus 1.0fil minus 1.0fil
+..@mathon
+..@textsy ^^O
+..@mathoff
+..@glue 7.22743
+.@textrm U
+.etc.
+
+Chapter 3 [3]
+Underfull \hbox (badness 10000) in paragraph at lines 338--339
+ @smalltt TS_ASSERT_SAME_DATA(input, output,,
+
+@hbox(6.25+2.0)x191.20168
+.@glue(@leftskip) 12.0
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.@discretionary
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 342--343
+ @smalltt TS_ASSERT_DELTA(sqrt(4.0), 2.0,
+
+@hbox(6.25+2.0)x191.20168
+.@glue(@leftskip) 12.0
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.@discretionary
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 346--347
+ @smalltt TS_ASSERT_DIFFERS(exam.numTook(),
+
+@hbox(6.25+1.25)x191.20168
+.@glue(@leftskip) 12.0
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.@discretionary
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 350--351
+ @smalltt TS_ASSERT_LESS_THAN(ship.speed(),
+
+@hbox(6.25+2.0)x191.20168
+.@glue(@leftskip) 12.0
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.@discretionary
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 352--353
+[][]@smalltt TS_ASSERT_LESS_THAN_EQUALS([]@smallit x,
+
+@hbox(6.25+1.75)x145.68143
+.@pdflink(*+*)x* attr{/Border [0 0 0]} action goto name{lte}
+.@pdfliteral{1 1 0 0 k}
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 354--355
+ @smalltt TS_ASSERT_LESS_THAN_EQUALS(requests,
+
+@hbox(6.25+2.0)x191.20168
+.@glue(@leftskip) 12.0
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.@discretionary
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 358--359
+ @smalltt TS_ASSERT_PREDICATE(SeemsReasonable,
+
+@hbox(6.25+1.25)x191.20168
+.@glue(@leftskip) 12.0
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.@discretionary
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 362--363
+ @smalltt TS_ASSERT_RELATION(std::greater,
+
+@hbox(6.25+2.0)x191.20168
+.@glue(@leftskip) 12.0
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.@discretionary
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 366--367
+ @smalltt TS_ASSERT_THROWS(parse(file),
+
+@hbox(6.25+2.0)x191.20168
+.@glue(@leftskip) 12.0
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.@discretionary
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 368--369
+[][]@smalltt TS_ASSERT_THROWS_EQUALS([]@smallit expr,
+
+@hbox(6.25+1.75)x145.68143
+.@pdflink(*+*)x* attr{/Border [0 0 0]} action goto name{throwsx}
+.@pdfliteral{1 1 0 0 k}
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 372--373
+[][]@smalltt TS_ASSERT_THROWS_ASSERT([]@smallit expr,
+
+@hbox(6.25+1.75)x145.68143
+.@pdflink(*+*)x* attr{/Border [0 0 0]} action goto name{throwsx}
+.@pdfliteral{1 1 0 0 k}
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 376--377
+[][]@smalltt TS_ASSERT_THROWS_ANYTHING([]@smallit expr@smalltt )[][][]
+
+@hbox(6.25+1.75)x145.68143
+.@pdflink(*+*)x* attr{/Border [0 0 0]} action goto name{throwsx}
+.@pdfliteral{1 1 0 0 k}
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.etc.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 386--387
+ @smalltt TS_WARN("TODO: Check invalid
+
+@hbox(6.25+0.87708)x191.20168
+.@glue(@leftskip) 12.0
+.@smalltt T
+.@smalltt S
+.@smalltt _
+.@discretionary
+.etc.
+
+[4] [5] [6] [7] [8] [9] [10]
+Underfull \hbox (badness 10000) in paragraph at lines 904--907
+ 
+
+@hbox(0.0+0.0)x455.24408
+.@glue(@leftskip) 21.68121
+.@glue(@rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 909--912
+ 
+
+@hbox(0.0+0.0)x455.24408
+.@glue(@leftskip) 21.68121
+.@glue(@rightskip) 0.0
+
+[11 <./qt.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 914--917
+ 
+
+@hbox(0.0+0.0)x455.24408
+.@glue(@leftskip) 21.68121
+.@glue(@rightskip) 0.0
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 919--923
+ 
+
+@hbox(0.0+0.0)x455.24408
+.@glue(@leftskip) 21.68121
+.@glue(@rightskip) 0.0
+
+Chapter 4 [12 <./win32.png (PNG copy)> <./x11.png (PNG copy)> <./qt2.png (PNG c
+opy)>] [13]
+Underfull \hbox (badness 4543) in paragraph at lines 1063--1066
+[]@textrm CxxTest comes with pre-de-fined @texttt ValueTrait[]@textrm s for @te
+xttt int[]@textrm , @texttt char[]@textrm , @texttt dobule[] @textrm etc. in
+
+@hbox(7.60416+2.12917)x455.24408, glue set 3.57176
+.@hbox(0.0+0.0)x15.0
+.@textrm C
+.@textrm x
+.@textrm x
+.@textrm T
+.etc.
+
+[14] [15] [16] [17] [18] [19] [20] Appendix A [21] [22] [23] Appendix B
+[24] Appendix C [25] (./Versions.texi Appendix D [26] [27] [28]) [29] ) 
+Here is how much of TeX's memory you used:
+ 1718 strings out of 495629
+ 18003 string characters out of 1167884
+ 49678 words of memory out of 3000000
+ 3066 multiletter control sequences out of 10000+50000
+ 31953 words of font info for 111 fonts, out of 3000000 for 5000
+ 855 hyphenation exceptions out of 8191
+ 16i,6n,18p,394b,356s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/lo
+cal/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmb10.pfb></usr/local/texliv
+e/2008/texmf-dist/fonts/type1/bluesky/cm/cmbx12.pfb></usr/local/texlive/2008/te
+xmf-dist/fonts/type1/bluesky/cm/cmbxti10.pfb></usr/local/texlive/2008/texmf-dis
+t/fonts/type1/bluesky/cm/cmr10.pfb></usr/local/texlive/2008/texmf-dist/fonts/ty
+pe1/bluesky/cm/cmr9.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky
+/cm/cmsl10.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmslt
+t10.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmsy10.pfb><
+/usr/local/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmti10.pfb></usr/loca
+l/texlive/2008/texmf-dist/fonts/type1/bluesky/cm/cmti8.pfb></usr/local/texlive/
+2008/texmf-dist/fonts/type1/bluesky/cm/cmti9.pfb></usr/local/texlive/2008/texmf
+-dist/fonts/type1/bluesky/cm/cmtt10.pfb></usr/local/texlive/2008/texmf-dist/fon
+ts/type1/bluesky/cm/cmtt12.pfb></usr/local/texlive/2008/texmf-dist/fonts/type1/
+bluesky/cm/cmtt9.pfb>
+Output written on guide.pdf (33 pages, 278367 bytes).
+PDF statistics:
+ 674 PDF objects out of 1000 (max. 8388607)
+ 45 named destinations out of 1000 (max. 131072)
+ 813 words of extra memory for PDF output out of 10000 (max. 10000000)
+

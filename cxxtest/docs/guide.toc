@@ -1,0 +1,99 @@
+\chapentry{Introduction}{1}{1}
+\secentry{About this guide}{1}{1}{1}
+\chapentry{Getting started}{2}{2}
+\secentry{Getting CxxTest}{2}{1}{2}
+\secentry{Your first test!}{2}{2}{2}
+\secentry{Your second test}{2}{3}{2}
+\secentry{Graphical user interface}{2}{4}{3}
+\chapentry{\emph {Really} using CxxTest}{3}{4}
+\secentry{What can you test}{3}{1}{4}
+\subsecentry{\code {TS_FAIL}}{3}{1}{1}{6}
+\subsecentry{\code {TS_ASSERT}}{3}{1}{2}{6}
+\subsecentry{\code {TS_ASSERT_EQUALS}}{3}{1}{3}{6}
+\subsecentry{\code {TS_ASSERT_SAME_DATA}}{3}{1}{4}{6}
+\subsecentry{\code {TS_ASSERT_DELTA}}{3}{1}{5}{6}
+\subsecentry{\code {TS_ASSERT_DIFFERS}}{3}{1}{6}{6}
+\subsecentry{\code {TS_ASSERT_LESS_THAN}}{3}{1}{7}{6}
+\subsecentry{\code {TS_ASSERT_LESS_THAN_EQUALS}}{3}{1}{8}{7}
+\subsecentry{\code {TS_ASSERT_PREDICATE}}{3}{1}{9}{7}
+\subsecentry{\code {TS_ASSERT_RELATION}}{3}{1}{10}{7}
+\subsecentry{\code {TS_ASSERT_THROWS} and friends}{3}{1}{11}{7}
+\subsecentry{\code {TS_TRACE} and \code {TS_WARN}}{3}{1}{12}{8}
+\subsecentry{The \code {ETS_} macros}{3}{1}{13}{8}
+\subsecentry{The \code {TSM_} macros}{3}{1}{14}{8}
+\subsubsecentry{The \code {ETSM_} macros}{3}{1}{14}{1}{9}
+\secentry{Running the samples}{3}{2}{9}
+\secentry{Test fixtures}{3}{3}{9}
+\subsecentry{Test suite level fixtures}{3}{3}{1}{9}
+\secentry{Integrating with your build environment}{3}{4}{9}
+\subsecentry{Overview}{3}{4}{1}{10}
+\subsecentry{Actually doing it}{3}{4}{2}{10}
+\subsubsecentry{Using Makefiles}{3}{4}{2}{1}{10}
+\subsubsecentry{Using Cons}{3}{4}{2}{2}{10}
+\subsubsecentry{Using Microsoft Visual Studio}{3}{4}{2}{3}{10}
+\subsubsecentry{Using Microsoft Windows DDK}{3}{4}{2}{4}{11}
+\secentry{Graphical user interface}{3}{5}{11}
+\subsecentry{Starting the GUI minimized}{3}{5}{1}{11}
+\subsecentry{Leaving the GUI open}{3}{5}{2}{11}
+\subsecentry{Screenshots!}{3}{5}{3}{11}
+\chapentry{Advanced topics}{4}{13}
+\secentry{Aborting tests after failures}{4}{1}{13}
+\subsecentry{Controlling this behavior at runtime}{4}{1}{1}{13}
+\secentry{Commenting out tests}{4}{2}{13}
+\secentry{Comparing equality for your own types}{4}{3}{14}
+\subsecentry{The equality operator}{4}{3}{1}{14}
+\subsecentry{Value traits}{4}{3}{2}{14}
+\subsecentry{Unknown types}{4}{3}{3}{14}
+\subsecentry{Enumeration traits}{4}{3}{4}{15}
+\subsecentry{Defining new value traits}{4}{3}{5}{15}
+\subsubsecentry{Defining value traits for template classes}{4}{3}{5}{1}{16}
+\subsecentry{Overriding the default value traits}{4}{3}{6}{16}
+\secentry{Global Fixtures}{4}{4}{16}
+\subsecentry{World fixtures}{4}{4}{1}{17}
+\secentry{Mock Objects}{4}{5}{17}
+\subsecentry{Actually doing it}{4}{5}{1}{18}
+\subsecentry{Advanced topic with mock functions}{4}{5}{2}{18}
+\subsubsecentry{Void functions}{4}{5}{2}{1}{18}
+\subsubsecentry{Calling the real functions while testing}{4}{5}{2}{2}{18}
+\subsubsecentry{When there is no real function}{4}{5}{2}{3}{19}
+\subsubsecentry{Functions in namespaces}{4}{5}{2}{4}{19}
+\subsubsecentry{Overloaded functions}{4}{5}{2}{5}{19}
+\subsubsecentry{Changing the mock namespace}{4}{5}{2}{6}{20}
+\secentry{Test Listeners and Test Runners}{4}{6}{20}
+\subsecentry{Other test listeners}{4}{6}{1}{20}
+\subsubsecentry{The \code {stdio} printer}{4}{6}{1}{1}{20}
+\subsubsecentry{The Yes/No runner}{4}{6}{1}{2}{20}
+\subsubsecentry{Template files}{4}{6}{1}{3}{20}
+\secentry{Dynamically creating test suites}{4}{7}{21}
+\secentry{Static initialization}{4}{8}{21}
+\appendixentry{Command line options}{A}{22}
+\secentry{\option {--version}}{A}{1}{22}
+\secentry{\option {--output}}{A}{2}{22}
+\secentry{\option {--error-printer}}{A}{3}{22}
+\secentry{\option {--runner}}{A}{4}{22}
+\secentry{\option {--gui}}{A}{5}{22}
+\secentry{\option {--include}}{A}{6}{22}
+\secentry{\option {--template}}{A}{7}{23}
+\secentry{\option {--have-eh}}{A}{8}{23}
+\secentry{\option {--no-eh}}{A}{9}{23}
+\secentry{\option {--have-std}}{A}{10}{23}
+\secentry{\option {--no-std}}{A}{11}{23}
+\secentry{\option {--longlong}}{A}{12}{23}
+\secentry{\option {--abort-on-fail}}{A}{13}{23}
+\secentry{\option {--part}}{A}{14}{24}
+\secentry{\option {--root}}{A}{15}{24}
+\secentry{\option {--no-static-init}}{A}{16}{24}
+\appendixentry{Controlling the behavior of CxxTest}{B}{25}
+\secentry{\code {CXXTEST_HAVE_STD}}{B}{1}{25}
+\secentry{\code {CXXTEST_HAVE_EH}}{B}{2}{25}
+\secentry{\code {CXXTEST_ABORT_TEST_ON_FAIL}}{B}{3}{25}
+\secentry{\code {CXXTEST_USER_VALUE_TRAITS}}{B}{4}{25}
+\secentry{\code {CXXTEST_OLD_TEMPLATE_SYNTAX}}{B}{5}{25}
+\secentry{\code {CXXTEST_OLD_STD}}{B}{6}{25}
+\secentry{\code {CXXTEST_MAX_DUMP_SIZE}}{B}{7}{25}
+\secentry{\code {CXXTEST_DEFAULT_ABORT}}{B}{8}{25}
+\secentry{\code {CXXTEST_LONGLONG}}{B}{9}{25}
+\appendixentry{Runtime options}{C}{26}
+\secentry{\code {setAbortTestOnFail( bool )}}{C}{1}{26}
+\secentry{\code {setMaxDumpSize( unsigned )}}{C}{2}{26}
+\appendixentry{Version history}{D}{27}
