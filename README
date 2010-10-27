@@ -2,7 +2,6 @@ CARDIAC VISUALISATION TECHNIQUES
 
 Here you will find code, data and examples related to the talk.
 
-
 SETUP AND DEPENDENCIES:
 Many of the dependencies are optional. Often the easiest way to install is to use your favourite package manager e.g. aptitude, yum, MacPorts. Alternatively, download the source from the websites and follow the instructions for installation.
 
@@ -10,15 +9,24 @@ The code can be downloaded in zip or tar format from github.com/mattgibb/visuali
 
 For the file converter, you will need to install:
 
-Autoconf (www.gnu.org/software/autoconf/)
+CMake (cmake.org)
+VTK (vtk.org)
 Boost (www.boost.org)
 
+To run tests, you will need to install:
+
+Python (www.python.org)
+
 FILE CONVERSION
-Once you've checked out the code, change into the 'file_converter' subdirectory and run:
+The file converter translates many popular cardiac file formats into VTK format, for viewing with e.g. ParaView. Once you've checked out the code, change into the 'file_converter/build' subdirectory and run:
 
-autoreconf
-./configure --with-vtk=/path/to/vtk --with-vtk-version=<your vtk version>
-make
+ccmake ..
 
-Where <your vtk version> is something like '-5.4'. This will build the format conversion files.
-TODO: Elaborate on this and say what to do next, how to use them etc.
+This will generate build files for you in an interactive way. If nothing goes wrong, you should be able simply to press 'c' for configure a couple of times, then 'g' for generate. The instructions are at the bottom of the screen anyway. You might need to tell it where VTK or Boost is installed if you've installed them in a non-standard location for your OS.
+
+Once the makefiles are generated, just type make et voilà! tetgen_to_vtk is built.
+
+TODO: HOW TO USE tetgen_to_vtk
+
+RUNNING TESTS:
+To run the tests, change into 'file_converter/build/test' and type 'ctest'. All the tests should pass :)
