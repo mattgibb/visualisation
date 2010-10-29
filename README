@@ -30,3 +30,6 @@ TODO: HOW TO USE tetgen_to_vtk
 
 RUNNING TESTS:
 To run the tests, change into 'file_converter/build/test' and type 'ctest'. All the tests should pass :)
+
+
+TODO: Write VoxIO.cpp class for ITK and file converter program, so that people can convert from any format ITK supports e.g. *.mha, *.mhd, *.raw to *.vox format, which Tarantula receives. If anyone needs this, let Matt know and he will do it post haste.
