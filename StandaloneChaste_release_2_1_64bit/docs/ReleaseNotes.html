@@ -1,0 +1,642 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Chaste Release Notes for version 2.1</title>
+  </head>
+  <body>
+
+<h1>Chaste Release Notes</h1>
+
+<h2>Release 2.1 (changes since Release 2.0)</h2>
+
+<h3>Headline changes</h3>
+
+<h4>General</h4>
+
+<ul>
+  <li>
+    The user documentation has been significantly extended, and tutorials written for the cardiac executable.  Static versions of user guides and tutorials are available
+    for this release <a href="https://chaste.comlab.ox.ac.uk/chaste/tutorials/release_2.1/">here</a>.
+  </li>
+  <li>
+    External calls to the TetGen binary for <tt>MutableMesh::ReMesh()</tt> and for constructing instances of <tt>QuadraticMesh</tt> have been replaced by library calls.
+    There is thus no longer a need to install TetGen, and the TetGen source version 1.4.2 is now included with the release.
+    These changes will affect the results of 3D cell based simulations (slightly).
+  </li>
+</ul>
+
+<h4>Cardiac</h4>
+
+<ul>
+  <li> 
+    The standalone binary now has a folder of dependency libraries and a wrapper script <tt>Chaste.sh</tt> which ensures that these libraries are linked when the program is run.  The binary used to be a single monolithic file with all the dependencies compiled into it but this was known to cause run-time problems for some Linux distributions. </li>
+  <li>
+    The integration of CellML models of cardiac cells has been significantly improved.  Code for all cell models shipped with Chaste is now generated on-the-fly from CellML,
+    leading to some naming changes which will affect users of the source distribution (see below for details).  The process is highly configurable; see our
+    <a href="https://chaste.comlab.ox.ac.uk/chaste/tutorials/release_2.1/ChasteGuides/CodeGenerationFromCellML.html">guide page</a> for details.  In particular, variables
+    within the model may be annotated as modifiable parameters or derived quantities, and are then made available for access by name, both in the source release and via the
+    executable.
+    There is also improved support for units conversions, so that models can use any convention for the ionic currents and stimulus.
+  </li>
+  <li>
+    Various simulation parameters can now be changed via the XML file when resuming from a checkpoint.  These include cell model parameters, stimuli definitions, numerical
+    parameters, and post-processing specifications.
+  </li>
+  <li>
+    Cardiac PDE classes (which no longer contain PDE information) have now been renamed to be tissues, e.g. <tt>BidomainPde</tt> is now <tt>BidomainTissue</tt>.
+    This change means that <b>archives that used to contain such a class must also change, and so are not backwards compatible</b> (an &quot;unregistered class&quot; error will
+    be generated).  A script <tt>archive_convert.sed</tt> is provided in both the source and executable releases of Chaste to migrate archives to the new naming.
+    You can run it as follows:
+<pre>
+    sed -i -f archive_convert.sed path_to_checkpoint_data_folder/*.arch*
+</pre>
+  </li>
+</ul>
+
+<h3>Library compatibility</h3>
+<ul>
+  <li>PyCml can now use <a href="http://www.rdflib.net/">RDFLib</a> as the RDF library, which is a lot easier to install than the Redland library.</li>
+  <li>Chaste should now work with Boost versions 1.41 and above, although it does not yet receive as thorough testing on these.</li>
+</ul>
+
+<h3>Code changes</h3>
+
+<h4>New functionality and major changes</h4>
+<ul>
+  <li>General:<ul>
+    <li>
+      A new <tt>Warnings</tt> class has been introduced to keep track of issues that don't prevent the simulation completing but may need investigation to verify the results.
+      All unexpected warnings are printed at the end of the simulation or test-suite. If logging is switched on, then warnings appear in the log file as they happen.
+    </li>
+    <li>
+      The finite element assembler hierarchy has been completely changed and replaced with new assemblers and new solvers.
+      See <a href="https://chaste.comlab.ox.ac.uk/chaste/tutorials/release_2.1/ChasteGuides/FiniteElementAssemblersAndSolvers.html">ChasteGuides/FiniteElementAssemblersAndSolvers</a> for details.
+    </li>
+    <li>
+      Some SCons synonyms for common developer options have been provided (e.g. <tt>scons cl=1 b=_2 up=0 ts=mesh/test/TestDistributedTetrahedralMesh.hpp</tt>).
+      See the <a href="https://chaste.comlab.ox.ac.uk/chaste/tutorials/release_2.1/ChasteGuides/UserBuildGuide.html">build guide</a> for details.
+    </li>
+    <li>
+      The <tt>DistanceMapCalculator</tt> calculates in-mesh path distances along mesh edges rather than Euclidean distances.  The underlying algorithm is Dijkstra/A*
+      which produces partition-dependent solutions to the Euclidean distance problem but reliable solutions to the edge-based distance problem.
+    </li>
+    <li>
+      There have been several changes to the ODE system hierarchy, primarily related to providing information about the ODE system.  As well as information about state variables,
+      we now support named parameters and derived quantities.
+      <ul>
+        <li>A new base class <tt>AbstractParameterisedSystem</tt> has been created for <tt>AbstractOdeSystem</tt> and <tt>AbstractCvodeCell</tt> to contain the system information state and methods.</li>
+        <li>Renamed various methods on <tt>AbstractOdeSystem</tt> (now moved to <tt>AbstractParameterisedSystem</tt>) and <tt>AbstractOdeSystemInformation</tt> for clarity and consistency:
+          <ul>
+            <li><tt>rGetVariableNames/Units -> rGetStateVariableNames/Units</tt></li>
+            <li><tt>SetInitialConditionsComponent -> SetInitialCondition</tt></li>
+            <li><tt>GetStateVariableNumberByName -> GetStateVariableIndex</tt></li>
+            <li><tt>GetStateVariableValueByNumber -> GetStateVariable</tt></li>
+            <li><tt>GetStateVariableUnitsByNumber -> GetStateVariableUnits</tt></li>
+          </ul>
+        </li>
+        <li>
+          For named parameters, added methods <tt>GetParameterIndex</tt>, <tt>GetParameterUnits</tt>, <tt>rGetParameterNames</tt>, and <tt>rGetParameterUnits</tt> on <tt>AbstractParameterisedSystem</tt>
+          and <tt>AbstractOdeSystemInformation</tt>, and also methods <tt>Get/SetParameter</tt> and <tt>GetNumberOfParameters</tt> on <tt>AbstractParameterisedSystem</tt>.
+        </li>
+        <li>
+          For derived quantities, added methods <tt>GetDerivedQuantityIndex</tt>, <tt>GetDerivedQuantityUnits</tt>, <tt>rGetDerivedQuantityNames</tt>, and <tt>rGetDerivedQuantityUnits</tt>
+          on <tt>AbstractParameterisedSystem</tt> and <tt>AbstractOdeSystemInformation</tt>.  <tt>AbstractParameterisedSystem</tt> also has <tt>GetNumberOfDerivedQuantities</tt>,
+          <tt>ComputeDerivedQuantities</tt>, and <tt>ComputeDerivedQuantitiesFromCurrentState</tt>.  Note that these latter methods require the current time as input (in case the derived 
+          quantity was function of time) and may not be very efficient.  Concrete ODE system classes should define <tt>ComputeDerivedQuantities</tt> if they provide any derived quantities. 
+          The <tt>OdeSolution</tt> class also has support for writing derived quantities to disk.
+        </li>
+        <li>
+          Finally, there is also "any variable" functionality, with similarly named methods (e.g. <tt>GetAnyVariableIndex</tt>) which try first state variables, then parameters,
+          then derived quantities, until a matching name is found.  To support derived quantities, <tt>GetAnyVariable</tt> can optionally take the current time as a second parameter
+          (it defaults to zero).
+        </li>
+      </ul>
+    </li>
+    <li>
+      A new class <tt>FileFinder</tt> has been created to specify file locations (particularly for input) throughout the code (and in the XML cardiac parameters file) allowing for
+      greater flexibility.  Various locations that used to use plain strings now use this class instead, which may require small changes to code using these.
+    </li>
+    <li>In order to compare files with provenance data <tt>NumericFileComparison</tt> now ignores lines which begin with "# ".</li>
+  </ul>
+  </li>
+  <li>Cardiac:<ul>
+    <li>Numerical and post-processing parameters can now be changed when resuming a simulation from a checkpoint. See <a href="https://chaste.comlab.ox.ac.uk/chaste/tutorials/release_2.1/UserTutorials/CardiacExecutable/CheckpointingAndRestarting.html">UserTutorials/CardiacExecutable/CheckpointingAndRestarting</a> for details.</li>
+    <li>
+      The <tt>OutputVariables</tt> functionality has been fixed to actually output the variables requested!  It can now output any state variable, or any variable annotated
+      as a parameter or derived quantity in the cell model.
+    </li>
+    <li>
+      The use of multiple lookup tables should now work.  The LuoRudy1991 model uses both <i>V</i> and <i>Ca_i</i> as table keys as an example.  This leads to slight changes to
+      results when using an optimised LR91 model.
+    </li>
+    <li>
+      Backward Euler cell models are now also optimised using partial evaluation and lookup tables, and the latter optimisations have also been improved.
+      This has lead to slight changes in results when using optimised models.
+    </li>
+    <li>
+      APD calculation has changed so that it detects the resting potential, and therefore upstroke, more accurately. APDs will change slightly when run with the new version of the code.
+    </li>
+    <li>
+      A new class <tt>AbstractCardiacCellInterface</tt> has been introduced as a common parent of <tt>AbstractCardiacCell</tt> and <tt>AbstractCvodeCell</tt>.
+      This shouldn't have any impact on existing code, but will make it easier to switch between the two.
+    </li
+    <li>The deprecated <tt>ScaleFactor*</tt> elements are now optional in the XML schema.  Use of <tt>SetParameter</tt> is preferred.</li>
+    <li>
+      The <tt>DistanceMapCalculator</tt> calculates in-mesh path distances along mesh edges rather than Euclidean distances.  The underlying algorithm is Dijkstra/A*
+      which produces partition-dependent solutions to the Euclidean distance problem but reliable solutions to the edge-based distance problem.  This change affects:
+      <ul>
+        <li>Calculation of conduction velocities - distances might now be overestimated, but will preserve detours around cavities.</li>
+        <li>Calculation of transmural Epi/Mid/Endo layers - relative position in wall may vary from previous.</li>
+        <li>Algorithmic generation of fibre directions (Streeter method) - relative position in wall may vary from previous.</li>
+      </ul>
+    </li>
+  </ul>
+  </li>
+  <li>Cell-based:<ul>
+    <li>
+      If writing cell mutation states to the file <tt>cellmutationstates.dat</tt> in a <tt>TissueSimulation</tt>, the name of each mutation state present is now taken from its extended type ID info 
+      using a new method <tt>Identifiable::GetIdentifier</tt>.
+    </li>
+    <li>
+      Work is in progress on restructuring how model parameters are accessed in the cell-based code.
+      As part of this, all of the <tt>TissueConfig</tt> members have been moved into the classes in which they are used.
+      Simulations will now output a file containing the parameters used for that simulation.
+      In order to implement this:<ul>
+        <li>All <tt>CellKiller</tt> classes now require a <tt>OutputCellKillerParameters</tt> method.</li>
+		<li>All tissue classes now require a <tt>OutputTissueParameters</tt> method.</li>
+		<li>All force classes now require a <tt>OutputForceParameters</tt> method.</li>
+		<li>All such classes (and simulation subclasses) must have an archiving export key defined correctly.</li>
+      </ul>
+      See the tutorials for more information on how to write these.
+    </li>
+    <li>
+      The principles behind the cell mutation state refactor have now been applied more generally to cell properties, enabling the creation of arbitrary properties
+      that can be attached to cells.  There are new classes <tt>AbstractCellProperty</tt> and <tt>CellPropertyCollection</tt>, and <tt>CellMutationStateRegistry</tt>
+      has been replaced by <tt>CellPropertyRegistry</tt>.  A <tt>TissueCell</tt> now has a <tt>CellPropertyCollection</tt> member, in which it stores its mutation state
+      as well as any other cell property the user chooses.  Cell properties can be passed into the <tt>TissueCell</tt> constructor or by using the new method
+      <tt>AddCellProperty</tt>.  Similarly there are new methods <tt>RemoveCellProperty</tt> and <tt>rGetCellPropertyCollection</tt> on <tt>TissueCell</tt>.  Also,
+      <ul>
+        <li>The mutation state <tt>LabelledCellMutationState</tt> has been replaced with a new cell property class <tt>CellLabel</tt>.</li>
+        <li><tt>APOPTOTIC</tt> is no longer a <tt>CellProliferativeType</tt> but has been replaced with a new class <tt>ApoptoticCellProperty</tt>.</li>
+        <li>The output of some <tt>Tissue</tt> methods, such as <tt>GetCellMutationStateCount</tt>, have been changed.</li>
+        <li>
+          The classes <tt>Alarcon2004OxygenBasedCellCycleOdeSystem</tt> and <tt>Alarcon2004OxygenBasedCellCycleModel</tt> have been modified, so that instead of storing
+          a cell's mutation state, now they just store whether it has the cell property <tt>CellLabel</tt>.
+        </li>
+        <li>Removed unused <tt>Alarcon2004OxygenBasedCellCycleModel</tt> member variable <tt>mIsLabelled</tt>.</li>
+      </ul>
+    </li>
+    <li>
+      The creation of ODE-based cell cycle models has been eased.  There is now a wrapper around ODE solvers, <tt>AbstractCellCycleModelOdeSolver</tt> (with concrete singleton
+      implementation <tt>CellCycleModelOdeSolver</tt>) and ODE-based cell cycle model constructors now take an optional <tt>shared_ptr&lt;AbstractCellCycleModelOdeSolver></tt>
+      allowing the user to specify what solver to use.  A mixin base class for cell cycle models, <tt>CellCycleModelOdeHandler</tt>, has been created which cell cycle models
+      that solve a system of ODEs to determine progress through the cell cycle can inherit from.
+    </li>
+  </ul>
+  </li>
+</ul>
+
+<h4>Interface changes that may require changes to user code</h4>
+<ul>
+  <li>General:<ul>
+    <li>In <tt>AbstractLinearParabolicPde</tt>, <tt>ComputeLinearSourceTerm(x)</tt> and <tt>ComputeNonlinearSourceTerm(x,u)</tt> have been merged into one method <tt>ComputeSourceTerm(x,u)</tt>.</li>
+    <li>
+      The macro <tt>NEVER_REACHED</tt> has become a termination error and will always terminate (sequential/parallel and debug/NDEBUG).  This is a level 4 error according to our
+      <a href="https://chaste.comlab.ox.ac.uk/cgi-bin/trac.cgi/wiki/ExceptionStrategy">exception strategy</a>.  <tt>NEVER_REACHED</tt> now relies on <tt>PetscTools</tt> (so that it
+      can either exit or abort in parallel) -- compilation may fail if you are missing <tt>#include "PetscTools.hpp"</tt>.
+    </li>
+    <li>
+      Providing an estimate of the maximum number of nonzero entries expected on any row is now compulsory and is done via an additional argument to <tt>PetscTools::SetupMat</tt>,
+      rather than by a call to <tt>PetscTools::SetMaxNumNonzerosIfMatMpiAij</tt>.  <tt>PetscTools::SetupMat</tt> no longer has a <tt>MatType</tt> argument.  Code that uses the old
+      method in the problem class will no longer compile or may interpret extra arguments incorrectly.  Instead, changes must be made to the <tt>InitializeForSolve</tt> method of the
+      assembler.  Instead of instantiating the linear system by <tt>this->mpLinearSystem = new LinearSystem(template_vec);</tt>, we must add an extra argument:
+      <tt>this->mpLinearSystem = new LinearSystem(template_vec, *NNZ*);</tt>.
+    </li>
+    <li>
+      Replaced all mesh functionality for getting extremes of meshes with <tt>AbstractMesh::CalculateBoundingBox</tt> returning a <tt>ChasteCuboid</tt>.  The parallel specialisation in
+      <tt>DistributedTetrahedralMesh</tt> gets the bounding box of the global mesh.
+    </li>     
+    <li>Renamed various methods on <tt>AbstractOdeSystem</tt> and <tt>AbstractOdeSystemInformation</tt> for clarity.  We want to stress that these methods do not change
+        the state variables of the instance of an ODE on which they are called, but the values considered default.
+      <ul>
+        <li> <tt>SetInitialConditions</tt> -> <tt>SetDefaultInitialConditions</tt> </li>
+        <li> <tt>SetInitialCondition</tt> -> <tt>SetDefaultInitialCondition</tt> </li>
+      </ul> 
+    </li>
+    <li>
+      <tt>PetscTools::CreateVec(int size, double value)</tt> method renamed to <tt>CreateAndSetVec</tt>.  The removal of this overload allows for the new interface method
+      <tt>PetscTools::CreateVec(int size, int localSize)</tt>.
+    </li>
+    <li>Distributed mesh <tt>GetAnyNode</tt> method renamed to <tt>GetNodeOrHaloNode</tt>.</li>
+  </ul>
+  </li>
+  <li>Cardiac:<ul>
+    <li>
+      All cell models are generated on the fly from CellML, which will break code previously using these. Please update the following:
+      <ul>
+        <li><tt>#include</tt> directives:
+          <ul>
+            <li><tt>luo_rudy_1991.hpp -> LuoRudy1991.hpp, luo_rudy_1991Opt.hpp -> LuoRudy1991Opt.hpp, luo_rudy_1991BackwardEuler.hpp and BackwardEulerLuoRudyIModel1991.hpp -> LuoRudy1991BackwardEuler.hpp, luo_rudy_1991Cvode.hpp -> LuoRudy1991Cvode.hpp, luo_rudy_1991CvodeOpt.hpp -> LuoRudy1991CvodeOpt.hpp</tt></li>
+            <li><tt>noble_varghese_kohl_noble_1998_a.hpp -> NobleVargheseKohlNoble1998a.hpp, noble_varghese_kohl_noble_1998_aOpt.hpp -> NobleVargheseKohlNoble1998aOpt.hpp</tt></li>
+            <li><tt>tentusscher_model_2006_epi_corrected_flooristim.hpp -> TenTusscher2006Epi.hpp, tentusscher_model_2006_epi_corrected_flooristimOpt.hpp -> TenTusscher2006EpiOpt.hpp, tentusscher_model_2006_epi_corrected_flooristimBackwardEuler.hpp and BackwardEulerTenTusscher2006.hpp -> TenTusscher2006EpiBackwardEuler.hpp</tt></li>
+          </ul></li>
+        <li>Class names: New names all take the form "<tt>Cell&lt;FileBaseName>FromCellML&lt;Modifiers></tt>", e.g. <tt>CellLuoRudy1991FromCellML</tt>,
+            <tt>CellTenTusscher2006EpiFromCellMLOpt</tt>, <tt>CellLuoRudy1991FromCellMLCvodeOpt</tt>, <tt>CellTenTusscher2006EpiFromCellMLBackwardEuler</tt>.</li>
+      </ul>
+      See the <a href="https://chaste.comlab.ox.ac.uk/chaste/tutorials/release_2.1/ChasteGuides/CodeGenerationFromCellML.html">guide page</a> for more details.
+    </li>
+    <li><tt>#include "Maleckar2009OdeSystem.hpp"</tt> should be replaced with <tt>#include "Maleckar2008.hpp"</tt> to reflect year of publication.</li>
+  </ul>
+  </li>
+  <li>Cell-based:<ul>
+    <li>
+      To reflect the general nature of the classes, we have renamed <tt>TissueCell</tt> to <tt>Cell</tt>, <tt>Tissue</tt> to <tt>CellPopulation</tt> and
+      <tt>TissueSimulation</tt> to <tt>CellBasedSimulation</tt>.
+    </li>
+    <li>
+      We now create and access <tt>Cell</tt> objects via Boost shared pointers, and disallow copying of <tt>Cell</tt>s, since this doesn't make biological sense and is inefficient.
+      The type alias <tt>CellPtr</tt> is available to ease transition and save typing!  Many methods that previously took in or returned <tt>Cell</tt>s now deal
+      with <tt>CellPtr</tt>s.  Copying of cell cycle models has also been disallowed.
+    </li>
+    <li><tt>CellBasedSimulation</tt> and inherited classes now do not take in a force collection. To set the mechanics system call the <tt>AddForce</tt> method.</li>
+    <li>
+      The mesh classes <tt>Face</tt>, <tt>VoronoiCell</tt>, <tt>VoronoiTessellation</tt> and <tt>InventorVoronoiWriter</tt> have been deleted.  This is because they are no longer
+      used in the code.  Now, when a <tt>MeshBasedTissue</tt> is required to construct the Voronoi tessellation that is dual to its mesh, this is stored as a <tt>VertexMesh</tt>.
+      The main difference is how the <tt>MeshBasedTissue</tt> then accesses information about the Voronoi tessellation.  Users should replace <tt>MeshBasedTissue</tt> calls to
+      <tt>rGetVoronoiTessellation.GetFaceArea</tt> with <tt>GetAreaOfVoronoiElement</tt>, calls to <tt>rGetVoronoiTessellation.GetFacePerimeter</tt> with
+      <tt>GetPerimeterOfVoronoiElement</tt>, and calls to <tt>rGetVoronoiTessellation.GetEdgeLength</tt> with <tt>GetVoronoiEdgeLength</tt>.
+    </li>
+    <li>Changed <tt>MeshBasedTissue</tt> method <tt>rGetVoronoiTessellation</tt> to <tt>GetVoronoiTessellation</tt> (i.e. return a pointer rather than a reference) in order to avoid memory issues.</li>
+    <li>Various renamings have occurred:
+      <ul>
+      <li>
+        <tt>MeshBasedTissue</tt> methods <tt>SetOutputTissueAreas</tt>, <tt>WriteTissueAreaResultsToFile</tt>, <tt>WriteCellAreaResultsToFile</tt> renamed to use
+        <tt>Volume</tt> instead of <tt>Area</tt>.  Similarly merged the <tt>VertexMesh</tt> method <tt>GetPerimeterOfVoronoiElement</tt> into
+        <tt>GetSurfaceAreaOfVoronoiElement</tt> and <tt>GetAreaOfVoronoiElement</tt> into <tt>GetVolumeOfVoronoiElement</tt>.
+      </li>
+      <li><tt>VertexMesh</tt> method <tt>SolveVoronoiElementIndexMapping</tt> renamed to <tt>GetVoronoiElementIndexCorrespondingToDelaunayNodeIndex</tt>.</li>
+      </ul>
+    </li>
+    <li>When a <tt>MeshBasedTissue</tt> creates a Voronoi tessellation, this is constructed out of all nodes in the mesh, including ghost nodes.</li>
+    <li><tt>CellwiseData</tt> has been generalised to cope with vertex-based tissues; some of its methods have changed names or arguments.</li>
+  </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2>Release 2.0 (changes since Release 1.1)</h2>
+
+<h3>Headline features</h3>
+
+<ul>
+  <li>Dynamic loading of cell models defined in CellML (using a source release of Chaste).</li>
+  <li>Checkpointing of cardiac simulations now supported.</li>
+  <li>Support for open-source visualisation of cardiac simulations via VTK or cmgui.</li>
+  <li>More cardiac simulation post-processing functionality now available in the executable.</li>
+  <li>Support for transmural cellular heterogeneities definition in the XML parameters file.</li>
+  <li>Support for more versions of our library dependencies.</li>
+  <li>Improved documentation of the parameters file XML schema.</li>
+  <li>Use of a distributed mesh in the cardiac executable.</li>
+  <li>Use of parMETIS for partitioning in parallel cardiac simulations.</li>
+  <li>Introduction of binary form of Triangle/Tetgen mesh format.</li>
+  <li>Cancer component renamed to cell_based to reflect the increasing generality of the code.</li>
+</ul>
+
+<h3>Library compatibility</h3>
+We have improved Chaste compatibility with its library dependencies:
+<ul>
+<li> MPI - Chaste is known to work with MPICH1 (mpich-1.2.7p1), MPICH2
+(mpich2-1.1.1p1) and OpenMPI (1.2.7).  mpich-1.2.7p1 is recommended.  Note
+that PETSc and HDF5 must be compiled with the same MPI that is used in the
+Chaste configuration.</li>
+<li> HDF5 - Chaste is known to work with version 1.6.6 (recommended) and
+version 1.8.3.</li>
+<li> PETSc - Chaste is known to work with version 2.2.1, version 2.3.2
+(recommended), version 2.3.3 and version 3.0.</li>
+<li> Boost - Chaste is regularly tested with Boost 1.33.1, Boost 1.34 (recommended), Boost 1.37 and Boost 1.40.
+Chaste also supports Boost 1.36, 1.38 and 1.39, although these versions are not regularly tested.
+Chaste DOES NOT WORK with Boost 1.35 (due to a known bug in that version of Boost)
+ nor with version 1.41 and above (due to changes in the serialization library API).
+</li>
+</ul>
+
+<h3>Code changes</h3>
+
+<h4>New functionality</h4>
+
+<ul>
+  <li>
+    To support ongoing extensions to the executable functionality, the Chaste parameters file now uses an XML
+    namespace to indicate which version of Chaste it is for.
+    This means that there are now multiple schemas in <tt>heart/src/io</tt>, one for release 1.1 and one for release 2.0.
+    To update your parameters XML files, simply add a namespace declaration by adding the following attributes to the root
+    <tt>ChasteParameters</tt> element:
+    <pre>
+       xmlns="https://chaste.comlab.ox.ac.uk/nss/parameters/2_0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://chaste.comlab.ox.ac.uk/nss/parameters/2_0 ChasteParameters_2_0.xsd"</pre>
+    See <tt>ChasteParameters.xml</tt> in the Chaste source folder for an example.  Make sure to use the correct path to the
+    <tt>ChasteParameters_2_0.xsd</tt> file.
+    Chaste should still be able to read old parameters files, but you will need to use the new version to take advantage of new features
+    (such as post-processing and checkpointing).
+  </li>
+  
+  <li>
+    The cardiac executable has gained the ability to automatically load cell models encoded as CellML files at run-time, rather than needing
+    them to be incorporated within Chaste when it is compiled.  In order to take advantage of this, you need (at present) to have built the
+    executable from source yourself, as it uses your Chaste source tree to convert the CellML file into runnable code.
+    
+    <br />This change means that the definition of ionic models within the parameters file has changed.  To specify one of the models
+    included within Chaste, you now need to wrap it in a <tt>&lt;Hardcoded&gt;</tt> element, e.g.
+        <pre>    &lt;Hardcoded&gt;FaberRudy2000&lt;/Hardcoded&gt;</pre>
+    Specify a dynamically loaded model using the <tt>&lt;Dynamic&gt;</tt> element instead, e.g.
+        <pre>
+    &lt;Dynamic&gt;
+        &lt;Path relative_to="chaste_source_root"&gt;heart/dynamic/libDynamicallyLoadableLr91.so&lt;/Path&gt;
+    &lt;/Dynamic&gt;</pre>
+    The path may either point to a pre-compiled shared library (as in the example), or a CellML file.  If the latter, a shared library will
+    be created in the same folder as the CellML file, and loaded by the executable at run-time.
+    See <tt>heart/test/data/xml/ChasteParametersFullFormat.xml</tt> for a full example parameters file.
+    
+    <br />Another side effect of this
+    is that the continuous test pack now requires the prerequisites for PyCml to be installed in order for the tests of this new functionality
+    to pass.  See <a href="https://chaste.comlab.ox.ac.uk/cgi-bin/trac.cgi/wiki/InstallPyCml">InstallPyCml</a> for installation instructions.
+  </li>
+  
+  <li>
+    Checkpointing functionality has now been added to the cardiac executable.  This is activated by including a <tt>CheckpointSimulation</tt>
+    element within the <tt>Simulation</tt> element, e.g.
+    <pre>    &lt;CheckpointSimulation timestep="0.2" unit="ms" max_checkpoints_on_disk="3"/&gt;</pre>
+    The <tt>timestep</tt> specifies how frequently to checkpoint, and must be a multiple of the printing timestep.  You can, optionally,
+    specify the maximum number of checkpoints to keep on disk; when this limit is reached, the oldest checkpoint will be deleted before a new
+    checkpoint is made.
+    <br />Note that making a checkpoint does add a significant overhead at present, in particular because the mesh is written out to disk at
+    each checkpoint.  This is to ensure that each checkpoint directory contains everything needed to resume the simulation.  In particular,
+    the mesh written out will be in permuted form if it was partitioned for a parallel simulation.
+    <br />Meshes written in checkpoints use a binary form of the Triangle/Tetgen mesh format.  This makes checkpoints significantly smaller but 
+    will cause portability problems if checkpoints are moved between little-endian systems (e.g. x86) and big-endian systems (e.g. PowerPC).
+    <br />Checkpoints will be written to a tree of folders adjacent to the main test output, as shown here (where &lt;OutputDirectory&gt; is
+    the folder specified by the &lt;OutputDirectory&gt; element):
+    <pre>
+        CHASTE_TEST_OUTPUT
+            &lt;OutputDirectory&gt;
+            &lt;OutputDirectory&gt;_checkpoints
+                0.2ms                        (or whatever the timestep is set to)
+                    &lt;OutputDirectory&gt;        (a copy of the simulation output so far)
+                    &lt;OutputDirectory&gt;_0.2ms  (the checkpoint data itself)
+                    ResumeParameters.xml     (a parameters file for easy resuming from this checkpoint)
+                0.4ms
+                ...</pre>
+    To resume from a checkpoint, copy the contents of the relevant folder (e.g. <tt>0.2ms</tt>) into the <tt>CHASTE_TEST_OUTPUT</tt> folder,
+    edit the <tt>ResumeParameters.xml</tt> file to set the <tt>ArchiveDirectory</tt> correctly, and run the executable with that parameters
+    file.
+    <br />Checkpoints may be resumed on any number of processes &mdash; you are not restricted to the number on which it was saved.  However,
+    the mesh will <b>not</b> be re-partitioned if loaded on a different number of processes, so the parallel efficiency of the simulation may
+    be significantly reduced in this case.
+    <br />Resuming a checkpoint will attempt to extend the original results h5 file, if present, so that the file contains the complete
+    simulation results.  If this file does not exist, a new file will be created to contain just the results from the resume point.
+  </li>
+  
+  <li>
+    What format to convert HDF5 output to can now be specified in the XML configuration file (using the <tt>OutputVisualizer</tt> element),
+    and hence via <tt>HeartConfig</tt>.  As part of this change, the default behaviour has also changed to outputting meshalyzer data;
+    if you don't want this you have to explicitly turn it off.  There is an unfortunate conflict between visualizer output and outputting
+    cell model state variables - you can't do both!  Calling <tt>SetOutputVariables</tt> on <tt>HeartConfig</tt> will automatically turn off
+    visualizer output.  If you specify <tt>OutputVariables</tt> in the XML configuration file, however, you are responsible for also including
+    an <tt>&lt;OutputVisualizer meshalyzer="no"/&gt;</tt> element.
+  </li>
+  
+  <li>
+    Some post-processing functionality may now be specified in the XML file, using the <tt>PostProcessing</tt> element within
+    <tt>ChasteParameters</tt>.  Four post-processing outputs are possible, corresponding to 4 child elements:
+    <ol>
+      <li><tt>ActionPotentialDurationMap</tt></li>
+      <li><tt>UpstrokeTimeMap</tt></li>
+      <li><tt>MaxUpstrokeVelocityMap</tt></li>
+      <li><tt>ConductionVelocityMap</tt></li>
+    </ol>
+    See the XML Schema documentation for more information on each of these.
+  </li>
+
+  <li>
+    The cardiac executable has gained the ability to specify cellular transmural heterogeneities in 3D cardiac geometries as an alternative to the heterogeneity definition with cuboids (note that the two methods cannot be used simultaneously at the moment). To take advantage of this feature the user must provide three files defining left ventricular surface (LV), right ventricular surface (RV) and epicardial surface (EPI). These three files must have the same base name as the mesh in use and must contain a list of those node indices belonging to each surface. See <a href="File_Formats.html"> documentation on file formats </a> and the XML Schema documentation for more information.
+    <br />
+    Within the CellHeterogeneities element, the user has now the ability to specify three CellHeterogeneity elements, one for the epicardial layer, one for the midmyocardial layer and one for the endocardial layer. For each layer, it is possible to define the relative thickness of it (summation of the three relative thicknesses must be one) as well as a set of three scale factors for ionic conductances (Gks, Ito and Gkr). This feature is currently supported for the following cell models: tenTusscher2006, Maleckar2009 and FaberRudy2000. 
+  </li>
+  
+  <li>
+    Chaste can optionally use the CVODE library of ODE solvers for performing single cell cardiac simulations, and also more generally
+    for solving ODEs.  This requires a change to your hostconfig file to specify the location of the CVODE libraries; see default.py for
+    an example.  The <tt>CvodeAdaptor</tt> class presents the same interface as other Chaste ODE solvers, but uses CVODE.
+    
+    <br />There is also a specialised cardiac cell base class <tt>AbstractCvodeCell</tt> which uses CVODE's vector type natively for better
+    performance.  Due to this it cannot be used in tissue simulations.  PyCml can generate subclasses of this class; use the --cvode option
+    to the helper script (python/ConvertCellModel.py) in order to do so.
+  </li>
+  
+  <li>
+    Region attributes can be added to Triangle/Tetgen element and face/edge files.  
+    These should be non-negative and can be retrieved with <tt>mesh.GetBoundaryElement(i)->GetRegion()</tt>
+    or similar.  Note that (due to the default behaviour of Triangle) edges with a region attribute of zero 
+    are ignored.
+  </li>
+  
+  <li>
+    The majority of the output files now include a comment detailing the
+    version of Chaste that produced them.
+  </li>
+</ul>
+
+<h4>Some behaviour corrections</h4>
+
+<ul>
+  <li>
+    An indexing error in previous release meant that mesh produced by Chaste on the fly (slab/cuboid meshes) were not conforming.
+    That is, the faces did not meet correctly and the finite element approximation was discontinuous.  This behaviour has been fixed.
+  </li>
+</ul>
+
+<h4>Interface changes that may require changes to user code</h4>
+
+<ul>
+  <li>General:<ul>
+    <li>
+      <tt>LinearSystem::ZeroMatrixRow</tt> is deprecated due to inefficiency. 
+      Use <tt>LinearSystem::ZeroMatrixRowsWithValueOnDiagonal</tt> to modify multiple rows instead.
+    </li>
+    <li>
+      In the <tt>AssemblerTraits</tt> struct, the typenames '<tt>CVT_CLS</tt>', '<tt>CMT_CLS</tt>' and '<tt>INTERPOLATE_CLS</tt>'
+      have been renamed to '<tt>CVT_CLASS</tt>', '<tt>CMT_CLASS</tt>' and '<tt>INTERPOLATE_CLASS</tt>'.
+      These stand for 'ComputeVectorTerm class', 'ComputeMatrixTerm class' and 'Interpolate class' in case you are wondering,
+      and the <tt>AssemblerTraits</tt> struct is used to state which classes these methods are implemented in. 
+    </li>
+    <li>
+      Changed <tt>OdeSolution::WriteToFile()</tt> so that it no longer takes the <tt>AbstractOdeSystem</tt> as an argument.
+    </li>
+    <li>
+      If you were implementing serialization for classes, note that the interface has changed, in order to better support different Boost
+      versions.  You should include <tt>ChasteSerialization.hpp</tt> rather than <tt>boost/serialization/access.hpp</tt>.
+      Also, the file <tt>TemplatedExport.hpp</tt>
+      has been replaced with two files: <tt>SerializationExportWrapper.hpp</tt> and <tt>SerializationExportWrapperForCpp.hpp</tt>.
+      You should include the first in .hpp files, after the class definition.  The second should be included in .cpp files, after any
+      other includes (I suggest putting it at the end of the file for consistency).  In both cases, a suitable <tt>CHASTE_CLASS_EXPORT</tt>
+      line should be used, the same in both .hpp and .cpp.  (There are also the usual variant macros for common cases of templated classes.)
+      See <a href="https://chaste.comlab.ox.ac.uk/cgi-bin/trac.cgi/wiki/BoostSerialization">BoostSerialization</a> for more info. 
+    </li>
+    <li>
+      The dependency on the METIS library has been replaced by one on parMETIS. This will require a small edit of the hostconfig file (see 
+      INSTALLATION.txt for details).
+    </li>
+    <li>
+      <tt>ParallelTetrahedralMesh</tt> has been renamed to
+      <tt>DistributedTetrahedralMesh</tt>.
+    </li>
+    <li>
+      The logic for project <tt>SConscript</tt> files has been moved into
+      <tt>python/SConsTools.py</tt>.  This allows project
+      <tt>SConscript</tt> files to be very short, and makes it easier to
+      enhance or modify the build system logic in the future.  See the
+      template project's <tt>SConscript</tt> file for an example; you will
+      need to update your <tt>SConscript</tt> file, since the logic has
+      changed since release 1.1.
+    </li>
+  </ul></li>
+  
+  <li>Cardiac:<ul>
+    <li>
+      The boundary conditions container in cardiac problem classes is now accessed via a <tt>boost::shared_ptr</tt> (rather than a raw pointer).
+      The PDE assembler hierarchy is still using normal pointers, however, so this should only affect people creating cardiac problem subclasses,
+      or setting their own boundary conditions for cardiac problems: if you do these, you'll need to use a shared pointer now.
+    </li>
+    <li>
+      The methods <tt>ConvertOutputToMeshalyzerFormat</tt>, <tt>ConvertOutputToCmguiFormat</tt> and <tt>ConvertOutputToVtkFormat</tt>
+      have been removed from <tt>AbstractCardiacProblem</tt>.  Code using these should change to use the methods
+      <tt>SetVisualizeWithMeshalyzer</tt>, <tt>SetVisualizeWithCmgui</tt> or <tt>SetVisualizeWithVtk</tt> on <tt>HeartConfig</tt>.
+    </li>
+  </ul></li>
+  
+  <li>Cancer:<ul>
+    <li>
+      The <tt>cancer</tt> folder has been renamed to <tt>cell_based</tt> to reflect the more general nature of the code.
+      There is a subfolder called <tt>crypt</tt> containing crypt-specific functionality.
+      If you have a user project using the cancer code, a search &amp; replace from <tt>cancer</tt> to <tt>cell_based</tt> should suffice,
+      especially in your project <tt>SConscript</tt> file.
+    </li>
+    <li>
+      <tt>TissueConfig::Get/SetTopOfLinearWntGradient()</tt> have been renamed to <tt>Get/SetWntConcentrationParameter()</tt>,
+      so that an exponential Wnt concentration could be added.
+    </li>
+    <li>
+      The <tt>CryptCellMutationState</tt> enumeration has been replaced by a hierarchy of classes inheriting from
+      <tt>AbstractCellMutationState</tt>.  <tt>TissueCell</tt>s now have a shared pointer to a mutation state.  To ensure proper counting
+      of cells with each mutation, make sure that you give a cell a mutation state from its tissue's registry
+      (<tt>AbstractTissue::GetMutationRegistry</tt>).  Also, when passing a vector of cells to a tissue constructor, the passed-in vector
+      is now cleared, to emphasize that these cells become owned by the tissue.  Also removed <tt>AbstractTissue::mCellMutationStateCount</tt>
+      and, as a result, changed <tt>rGetCellMutationStateCount()</tt> to <tt>GetCellMutationStateCount()</tt>.
+    </li>
+    <li>
+      The <tt>CellsGenerator</tt> class hierarchy has been refactored to reduce code duplication.  There is now a base class
+      <tt>CellsGenerator</tt>, which is templated over cell cycle model classes and dimension, and comprises <tt>GenerateBasic()</tt> and
+      <tt>GenerateGivenLocationIndices()</tt> methods; and a subclass <tt>CryptCellsGenerator</tt>, which has an additional method
+      <tt>Generate()</tt> that sets up cells for a crypt simulation.
+    </li>
+    <li>
+      To reduce the number of calls to <tt>CreateCellPair</tt>, the <tt>MeshBasedTissue</tt> methods <tt>IsMarkedSpring</tt>,
+      <tt>MarkSpring</tt> and <tt>UnmarkSpring</tt> no longer call the <tt>CreateCellPair</tt> method, and now take in a reference to a
+      <tt>std::set&lt;TissueCell*&gt;</tt> instead of two <tt>TissueCell</tt> references.
+    </li>
+    <li>
+      The <tt>mesh</tt> component now contains an extra folder <tt>vertex</tt>, which includes classes for the construction and
+      reading/writing of 'vertex meshes' (these are meshes in which the number of nodes per element is unrestricted) as well as associated
+      tests.
+    </li>
+    <li>
+      <tt>AbstractCryptStatistics::GetWhetherCryptSectionCellsAreLabelled</tt> has been renamed to <tt>AreCryptSectionCellsLabelled</tt>.
+    </li>
+    <li>
+      Changes to the archive format mean that checkpoint archives created with earlier versions of Chaste will not load in the new version.
+    </li>
+  </ul></li>
+</li>
+</ul>
+
+
+<h2>Release 1.1 (changes since Release 1.0)</h2>
+
+<h3>General</h3>
+
+<ul>
+<li>Parts of the <a href="https://chaste.comlab.ox.ac.uk/cgi-bin/trac.cgi/wiki/">Chaste developers wiki</a> have now been opened to the general public.  For a guest login, use the username &quot;anonymous&quot;, and your email address as the password.</li>
+<li>Improved doxygen documentation.</li>
+<li>PyCml is now included in the main Chaste trunk (<tt>python/pycml</tt>).  This means that you no longer need to download it separately.  Note that the PyCml distributed with release 1 will <em>not</em> generate code compatible with Chaste release 1.1 (see also below).</li>
+</ul>
+
+<h3>Code changes</h3>
+
+<ul>
+<li>Improved code portability.
+  <ul>
+  <li>(Some of) Chaste can now be run under Cygwin; see the <a href="https://chaste.comlab.ox.ac.uk/cgi-bin/trac.cgi/wiki/InstallGuides/Cygwin">InstallGuides/Cygwin</a> wiki page for details.</li>
+  <li>Chaste now uses version 3.2.0 of <a href="http://www.codesynthesis.com/products/xsd/">XSD</a> (although versions 2.3.1 and 3.1.1a3 are also supported for now).  This should hopefully make Chaste easier to install on Macs</li>
+  </ul></li>
+
+<li>Some behaviour corrections.
+  <ul>
+  <li>For a dynamic assembler, if the matrix is constant you must now call <tt>this-&gt;SetMatrixIsConstant()</tt> in the constructor otherwise the matrix will now be assembled each timestep. If your matrix is not constant in time, you were getting wrong answers before!</li>
+  <li>Bidomain problems with Neumann intracellular stimuli shouldn't have a solution, and there was an implementation error before which allowed them to be solved. This has been fixed, so any test with Neumann stimuli will not work. The stimulus has to be changed to a (standard) volume stimulus.</li>
+  <li>For <tt>ELEMENT_DIM == 1</tt> (in any <tt>SPACE_DIM</tt>) <tt>MeshalyzerMeshWriter</tt> will now output a .cnnx file rather than a .tri file for element connections.</li>
+  </ul></li>
+
+<li>New functionality.
+  <ul>
+  <li><tt>MonodomainProblem</tt> is now templated on both <tt>ELEMENT_DIM</tt> and <tt>SPACE_DIM</tt>. It will default to using <tt>ELEMENT_DIM = SPACE_DIM</tt> if only one is supplied.</li>
+  <li>Several helper macros have been written for debugging, see global/Debug.hpp.</li>
+  <li>Added a <tt>CombinedOdeSystem</tt> class for simple coupling of ODE systems.</li>
+  </ul></li>
+
+<li>Work in progress.
+  <ul>
+  <li><em>Checkpointing</em> of cardiac simulations is on the way.  Most of the components of cardiac simulations now have their own archiving methods.  Unfortunately full checkpoint and restart functionality did not make it into this release.</li>
+  <li>There is functionality in the code and the XML for <em>post-processing physiological quantities</em> such as action potential duration and activation maps.  This functionality may only be used at the developer level.  If you are running the executable then requests in the XML file for post-processing will be ignored. </li>
+  </ul></li>
+
+</ul>
+
+
+<h4>Interface changes that may require changes to user code</h4>
+
+<ul>
+
+<li>General:<ul>
+<li>Triangle and tetgen binaries are no longer included with the code and must be installed and set in the <tt>PATH</tt>.  Most re-meshing still works since 2D re-mesh compiles Triangle code from source (which is included).</li>
+<li>The <a href="https://chaste.comlab.ox.ac.uk/cgi-bin/trac.cgi/wiki/CodeStructureStrategy#Policyonincludes"><tt>#include</tt> policy</a> has changed. It might be the case that tests that used to compile are unable to find certain header files now. Please <tt>#include</tt> such headers explicitly as needed.</li>
+<li>It is now impossible to create vectors (either PETSc <tt>Vec</tt>s or <tt>DistributedVector</tt>s) directly from a <tt>DistributedVector</tt>.  This must now be done via a <tt>DistributedVectorFactory</tt>.  If you have a mesh, a factory can be obtained using the <tt>GetDistributedVectorFactory</tt> method.  The cardiac PDEs also store a factory.</li>
+<li>Static iterators are not available anymore in <tt>DistributedVector</tt>. You can access the iterator from a <tt>DistributedVector</tt> object. If there isn't one in scope, use <tt>GetLow()</tt> and <tt>GetHigh()</tt> in <tt>DistributedVectorFactory</tt> (accessible via any mesh object).</li>
+<li>For a dynamic assembler, if the matrix is constant you must now call <tt>this-&gt;SetMatrixIsConstant()</tt> in the constructor otherwise the matrix will now be assembled each timestep. If your matrix is not constant in time, you were getting wrong answers before!</li>
+<li>Renamed <tt>PetscTools::NumProcs</tt> to <tt>PetscTools::GetNumProcs</tt>.</li>
+<li>Renamed <tt>AbstractMesh</tt> to <tt>AbstractTetrahedralMesh</tt>, there is a new <tt>AbstractMesh</tt> class, which will handle non-tetrahedral meshes.</li>
+</ul></li>
+
+<li>Heart:<ul>
+<li><tt>this-&gt;mpMesh</tt> is no longer directly available to cell factories, as it can be used accidentally while unset. Use the <tt>GetMesh()</tt> method instead.</li>
+<li>Cardiac cell models are now constructed using <tt>boost::shared_ptr&lt;&gt;</tt> instead of normal pointers for the 'stimulus' and 'ode solver' arguments.  This will require changes to cell factories too.  See files <tt>heart/test/ionicmodels/TestIonicModels.hpp</tt> and <tt>heart/src/problem/PlaneStimulusCellFactory.hpp</tt> for examples of the new usage.</li>
+</ul></li>
+
+<li>Cancer:<ul>
+<li><tt>WntConcentration</tt> is now templated over dimension. You will have to pass in the dimension when constructing any Wnt-dependent cell cycle model.</li>
+<li><tt>SloughingCellKiller</tt> is also now templated over dimension.</li>
+<li><tt>FixedCellCycleModel</tt>, <tt>StochasticCellCycleModel</tt>, and the two corresponding <tt>CellGenerators</tt> have been renamed (to <tt>FixedDurationGenerationBasedCellCycleModel</tt> and <tt>StochasticDurationGenerationBasedCellCycleModel</tt> respectively).</li>
+<li>The <tt>CancerParameters</tt> singleton class has been renamed <tt>TissueConfig</tt> (to match the heart code).</li>
+<li><tt>cancer/src/tissue/MeshArchiveInfo</tt> has been replaced by <tt>global/src/ArchiveLocationInfo</tt>, which has slightly different usage.</li>
+</ul></li>
+
+</ul>
+
+<p>
+Also, xsd should be defined in your hostconfig file (if it isn't on your <tt>PATH</tt>) in the form <tt>tools = {'xsd':'FILL_IN_PATH_TO_XSD_BINARY'</tt>} as it regenerates <tt>ChasteParameters.hpp/cpp</tt> during the build process.
+</p>
+
+
+  </body>
+</html>
