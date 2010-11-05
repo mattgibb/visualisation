@@ -17,6 +17,7 @@
 #include "vtkUnstructuredGrid.h"
 #include "vtkGenericGeometryFilter.h"
 #include "vtkCellArray.h"
+#include "vtkCellData.h"
 #include "vtkConfigure.h"
 #include "vtkFloatArray.h"
 #include "vtkPointData.h"
@@ -50,6 +51,14 @@ void create_elem(const std::string& file_name,
 void create_lines(const std::string& file_name,
                   vtkSmartPointer<vtkUnstructuredGrid> grid);
 
+/**
+ * Reads a .lon file and adds the vectors to the given elements;
+ */
+
+void create_vectors(const std::string& file_name,
+                  vtkSmartPointer<vtkUnstructuredGrid> grid);
+
+
 int main(int argc, char *argv[])
 {
   //Process command line 
@@ -61,6 +70,7 @@ int main(int argc, char *argv[])
     ("tris", po::value<std::string>(), "name of input tris file")
     ("elem", po::value<std::string>(), "name of input elem file")
     ("cnnx", po::value<std::string>(), "name of input cnnx file")
+    ("lon", po::value<std::string>(), "name of input lon file")
     ("output", po::value<std::string>(), "name of output file")
     ;
 
@@ -111,8 +121,15 @@ int main(int argc, char *argv[])
                  grid);
   }
  
-  vtkXMLPUnstructuredGridWriter* writer= vtkXMLPUnstructuredGridWriter::New();
+  if(vm.count("cnnx"))
+  {
+    create_vectors(vm["lon"].as<std::string>(),
+                   grid);
+  }
+  
+  vtkXMLUnstructuredGridWriter* writer= vtkXMLUnstructuredGridWriter::New();
   writer->SetInput(grid);
+  //writer->SetDataModeToAscii();
   writer->SetFileName(vm["output"].as<std::string>().c_str());
   writer->Write();
   writer->Delete();
@@ -270,7 +287,7 @@ void create_elem(const std::string& file_name,
     ++beg;
   
     std::istringstream iss4(*beg);
-    iss3 >> conn[3];
+    iss4 >> conn[3];
     ++beg;
       
     vtkIdList *pts = vtkIdList::New();
@@ -278,7 +295,9 @@ void create_elem(const std::string& file_name,
 
     for(unsigned int i=0;i<conn.size();++i)
     {
+      //std::cout << i << " " << conn[i] << std::endl;
 	  pts->SetId(i,conn[i]);
+    //std::cout << pts->GetId(i) << std::endl;
     } 
   
     grid->InsertNextCell(VTK_TETRA,pts);
@@ -339,5 +358,78 @@ void create_lines(const std::string& file_name,
     pts->Delete();
 
     ++cnnx_index;
+  }
+}
+
+
+/**
+ * Reads a .lon file and adds the vectors to the given elements;
+ * Code assumes that the file has a first line to ignore.
+ */
+void create_vectors(const std::string& file_name,
+                    vtkSmartPointer<vtkUnstructuredGrid> grid)
+{
+  //Create tris
+  std::ifstream lon_file(file_name.c_str());
+  if (!lon_file)
+  {
+    std::cerr << "Failed to read lon file" << std::endl;
+    abort();
+  }
+  
+  // 
+  
+  //Read the pts file
+  std::string line;
+  std::getline(lon_file, line); //Skip over the first line
+  
+  // quick and dirty way to check if there is a one-line header
+  // if there is, ignore it
+  // if (found!=string::npos)
+  // 
+  vtkCellData* cellData = grid->GetCellData();
+  vtkSmartPointer< vtkFloatArray > vectors = vtkSmartPointer< vtkFloatArray >::New();
+  vectors->SetName("lon");
+  cellData->AddArray(vectors);
+  
+  //Create Vertices
+  while(std::getline(lon_file, line))
+  {
+    double lon[3];
+    
+     // >> lon[0] >> lon[1] >> lon[2];
+    
+    char_delimiters_separator<char> sep(false, "", " ");
+    tokenizer<> line_toks(line, sep);
+      
+    std::stringstream vertex_coords;
+
+    tokenizer<>::iterator beg=line_toks.begin();
+    std::istringstream iss(*beg);
+    iss >> lon[0];
+    ++beg;
+
+    std::istringstream iss2(*beg);
+    iss2 >> lon[1];
+    ++beg;
+    
+    std::istringstream iss3(*beg);
+    iss3 >> lon[2];
+    ++beg;
+    
+    vectors->InsertNextTuple(lon);
+    
+    
+    //       
+    //     vtkIdList *pts = vtkIdList::New();
+    //     pts->SetNumberOfIds(2);
+    // 
+    //     for(unsigned int i=0;i<lon.size();++i)
+    //     {
+    // pts->SetId(i,lon[i]);
+    //     } 
+    //   
+    //     grid->InsertNextCell(VTK_LINE,pts);
+    //     pts->Delete();
   }
 }
