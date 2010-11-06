@@ -6,12 +6,15 @@ PROJECT(FILE_CONVERTER)
 FIND_PACKAGE(Boost COMPONENTS program_options REQUIRED)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 
-# Find VTK and add include dirs
+# Find libraries and add include dirs
 FIND_PACKAGE(VTK REQUIRED)
 INCLUDE(${USE_VTK_FILE})
+FIND_PACKAGE(ITK REQUIRED)
 
 ADD_SUBDIRECTORY(src)
 
-# if(BUILD_TESTING)
+
+OPTION(BUILD_TESTING "Set this to build and run the testing framework")
+if(BUILD_TESTING)
   ADD_SUBDIRECTORY(test)
-# endif(BUILD_TESTING)
+endif(BUILD_TESTING)
