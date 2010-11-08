@@ -13,4 +13,4 @@ ADD_EXECUTABLE(convert_chaste_to_vtk convert_chaste_to_vtk.cpp )
 TARGET_LINK_LIBRARIES(convert_chaste_to_vtk ${Boost_LIBRARIES} vtkCommon vtkIO)
 
 ADD_EXECUTABLE(convert_image convert_image.cpp )
-TARGET_LINK_LIBRARIES(convert_image ${Boost_LIBRARIES} ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(convert_image ${Boost_LIBRARIES} ITKCommon ITKIO VOXIO)
