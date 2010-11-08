@@ -7,6 +7,8 @@
 #include "itkImage.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
+// #include "itkVoxImageIO.h"
+#include "itkVoxImageIOFactory.h"
 
 using namespace std;
 
@@ -29,7 +31,7 @@ int main(int argc, char * argv[])
   po::store(po::command_line_parser(argc, argv).
             options(desc).positional(pd).run(), vm);
   po::notify(vm);
- 
+  
   // if --help is specified, or the usage is wrong
   if ( vm.count("help") || !vm.count("input") || !vm.count("output") ) {
     cout << "\nUsage: " << argv[0] << " input output\n\n";
@@ -37,6 +39,8 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
   
+  // Register vox IO library
+  itk::ObjectFactoryBase::RegisterFactory( itk::VoxImageIOFactory::New() );
   
   // ITK STUFF
   typedef float PixelType;
@@ -56,9 +60,22 @@ int main(int argc, char * argv[])
   writer->SetFileName( outputFilename );
 
   writer->SetInput( reader->GetOutput() );
-
+  
+  try
+    {
+    cout << "Reading...\n";
+    reader->Update();
+    }
+  catch( itk::ExceptionObject & err )
+    {
+      std::cerr << "ExceptionObject caught !" << std::endl; 
+      std::cerr << err << std::endl; 
+      return EXIT_FAILURE;
+    }
+  
   try 
     { 
+    cout << "Writing...\n";
     writer->Update(); 
     } 
   catch( itk::ExceptionObject & err ) 
