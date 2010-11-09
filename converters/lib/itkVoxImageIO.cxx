@@ -27,7 +27,7 @@ VoxImageIO::VoxImageIO():
   // set origin as in itkPNGImageIO
   m_Origin[0] = 0.0;
   m_Origin[1] = 0.0;
-  m_Origin[3] = 0.0;
+  m_Origin[2] = 0.0;
 }
 
 VoxImageIO::~VoxImageIO()
@@ -48,36 +48,40 @@ unsigned long VoxImageIO::GetHeaderSize()
     {
     itkExceptionMacro(<< "A FileName must be specified.");
     }
-
-  if ( !m_ManualHeaderSize )
+    
+  // not sure about order of initialisation here, so commented it out.
+  // if ( !m_ManualHeaderSize )
+  //   {
+  //   this->ComputeStrides();
+  // 
+  // make sure we figure out a filename to open
+  this->OpenFileForReading(file);
+  
+  //   // Get the size of the header from the size of the image
+  //   file.seekg(0, std::ios::end);
+  // 
+  //   m_HeaderSize = (unsigned long)( (unsigned long)file.tellg()
+  //                                   - (unsigned long)m_Strides[4] * 2 );
+  //   }
+    
+  file.seekg(0, std::ios::beg);
+      
+  char dummy[300];
+  file.getline(dummy,300).getline(dummy,300);
+  
+  if ( file.tellg() == -1 )
     {
-    this->ComputeStrides();
-
-    // make sure we figure out a filename to open
-    this->OpenFileForReading(file);
-
-    // Get the size of the header from the size of the image
-    file.seekg(0, std::ios::end);
-
-    m_HeaderSize = (unsigned long)( (unsigned long)file.tellg()
-                                    - (unsigned long)m_Strides[4] * 2 );
+    itkExceptionMacro(<< "The first couple of vox file lines are longer than 300 characters.")
     }
-    
-    file.seekg(0, std::ios::beg);
-    
-    std::cout << "tellg() after seekg(0, std::ios::beg): " << file.tellg() << std::endl;
-    
-    char dummy[300];
-    file.getline(dummy,300).getline(dummy,300);
-    
-    std::cout << "file.tellg(): " << file.tellg() << std::endl;
-    std::cout << "m_HeaderSize: " << m_HeaderSize << std::endl;
-    
-    if ((unsigned long)file.tellg() != m_HeaderSize)
-      {
-      itkExceptionMacro(<< "The vox file is not formatted properly.");
-      }
-    
+  
+  m_HeaderSize = file.tellg();
+  this->Modified();
+    // if ((unsigned long)file.tellg() != m_HeaderSize)
+    //   {
+    //   itkExceptionMacro(<< "The vox file is not formatted properly.");
+    //   }
+  file.close();
+  
   return m_HeaderSize;
 }
 
@@ -158,14 +162,21 @@ void VoxImageIO::ReadImageInformation()
 {
   std::ifstream file;
   
+  // Make sure m_Dimensions and m_Spacing are empty
+  m_Dimensions.clear();
+  m_Spacing.clear();
+  
+  
   // Open the file
   this->OpenFileForReading(file);
   
   // initialise m_Dimensions and m_Spacing
   SizeValueType size;
+  std::cout << "Before m_Dimensions, file.tellg(): " << file.tellg() << std::endl;
   for (unsigned int i=0; i<3; i++)
   {
     file >> size;
+    std::cout << "In m_Dimensions, i = " << i << ", file.tellg(): " << file.tellg() << std::endl;
     m_Dimensions.push_back(size);
   }
   
@@ -173,8 +184,18 @@ void VoxImageIO::ReadImageInformation()
   for (unsigned int i=0; i<3; i++)
   {
     file >> spacing;
+    std::cout << "In m_Spacing, i = " << i << ", file.tellg(): " << file.tellg() << std::endl;
     m_Spacing.push_back(spacing);
   }
+  
+  for (unsigned int i=0; i<3; i++)
+  {
+    std::cout << "m_Dimensions[" << i << "]: " << m_Dimensions[i] << std::endl;
+    std::cout << "m_Spacing[" << i << "]: " << m_Spacing[i] << std::endl;
+  }
+  
+  std::cout << "m_Dimensions.size(): " << m_Dimensions.size() << std::endl;
+  std::cout << "m_Spacing.size(): " << m_Spacing.size() << std::endl;
   
   file.close();
 }
