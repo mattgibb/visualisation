@@ -1,11 +1,11 @@
 CARDIAC VISUALISATION TECHNIQUES
 
-Here you will find code, data and examples related to the talk.
+Here you will find code, data and examples related to the talk. PLEASE say, send us a modification, or submit a pull request via GitHub if you see anything wrong, out of date, or that just needs improving, testing or refactoring. Please also submit extra tools you have that you think other people would find useful, preferably with a test or two to boot!
 
 SETUP AND DEPENDENCIES:
 Many of the dependencies are optional. Often the easiest way to install is to use your favourite package manager e.g. aptitude, yum, MacPorts. Alternatively, download the source from the websites and follow the instructions for installation.
 
-The code can be downloaded in zip or tar format from github.com/mattgibb/visualisation, but if you would like to keep up to date with the latest version easily, or to contribute a patch or extra tools and materials, you will need to install git (http://git-scm.com/). Further instructions are at github.com/mattgibb/visualisation.
+This code can be downloaded in zip or tar format from github.com/mattgibb/visualisation, but if you would like to keep up to date with the latest version easily, or to contribute a patch or extra tools and materials, you will need to install git (http://git-scm.com/). Further instructions will on the wiki at github.com/mattgibb/visualisation.
 
 For the file converter, you will need to install:
 
@@ -17,19 +17,18 @@ To run tests, you will need to install:
 
 Python (www.python.org)
 
-FILE CONVERSION
-The file converter translates many popular cardiac file formats into VTK format, for viewing with e.g. ParaView. Once you've checked out the code, change into the 'file_converter/build' subdirectory and run:
+FILE CONVERSION AND TRANSLATION
+The file converters translate output from  popular cardiac file formats into VTK format, for viewing with e.g. ParaView. Once you've checked out the code, change into the 'converters/build' subdirectory and run:
 
 ccmake ..
 
 This will generate build files for you in an interactive way. If nothing goes wrong, you should be able simply to press 'c' for configure a couple of times, then 'g' for generate. The instructions are at the bottom of the screen anyway. You might need to tell it where VTK or Boost is installed if you've installed them in a non-standard location for your OS.
 
-Once the makefiles are generated, just type make et voilà! tetgen_to_vtk is built.
+Once the makefiles are generated, just type make et voilà! The tools are built. You'll find them in converters/build/src. We hope they are straightforward to use, just run them with the '--help' option to find out how. If it's not clear, ask, then if you wouldn't mind, add instructions to the wiki or to this file for the next person :-)
 
-TODO: HOW TO USE tetgen_to_vtk
+SHARED LIBRARIES AND PLUGINS:
+Found in converters/build/lib
+TODO: Expand on this.
 
 RUNNING TESTS:
-To run the tests, change into 'file_converter/build/test' and type 'ctest'. All the tests should pass :)
-
-
-TODO: Write VoxIO.cpp class for ITK and file converter program, so that people can convert from any format ITK supports e.g. *.mha, *.mhd, *.raw to *.vox format, which Tarantula receives. If anyone needs this, let Matt know and he will do it post haste.
+To run the tests, change into 'converters/build/test' and type 'ctest'. All the tests should pass...
