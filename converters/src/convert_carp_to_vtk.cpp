@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
                  grid);
   }
  
-  if(vm.count("cnnx"))
+  if(vm.count("lon"))
   {
     create_vectors(vm["lon"].as<std::string>(),
                    grid);
@@ -381,7 +381,7 @@ void create_vectors(const std::string& file_name,
   
   //Read the pts file
   std::string line;
-  std::getline(lon_file, line); //Skip over the first line
+  // std::getline(lon_file, line); //Skip over the first line
   
   // quick and dirty way to check if there is a one-line header
   // if there is, ignore it
@@ -417,7 +417,10 @@ void create_vectors(const std::string& file_name,
     iss3 >> lon[2];
     ++beg;
     
-    vectors->InsertNextTuple(lon);
+    vectors->SetNumberOfComponents(3);
+    vectors->InsertNextTuple3(lon[0],lon[1],lon[2]);
+    
+    // vectors->InsertNextTuple(lon[0]);
     
     
     //       
