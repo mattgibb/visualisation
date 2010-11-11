@@ -16,6 +16,7 @@ ADD_SUBDIRECTORY(lib)
 
 ADD_SUBDIRECTORY(src)
 
+# Testing stuff
 OPTION(BUILD_TESTING "Set this to build and run the testing framework")
 if(BUILD_TESTING)
   ENABLE_TESTING()

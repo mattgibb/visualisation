@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
   //Loop over arrays, there should be two arrays for each time level
   // in the order Vm, phi_e. Note we start at timestep=1 to avoid deep copy issues.
-  for (unsigned i = 2; i < point_data->GetNumberOfArrays()/2; ++i)
+  for (int i = 2; i < point_data->GetNumberOfArrays()/2; ++i)
   {
     std::cout << "Converting " << i << " of " << point_data->GetNumberOfArrays()/2 << std::endl;
 
