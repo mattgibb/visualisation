@@ -18,5 +18,6 @@ ADD_SUBDIRECTORY(src)
 
 OPTION(BUILD_TESTING "Set this to build and run the testing framework")
 if(BUILD_TESTING)
+  ENABLE_TESTING()
   ADD_SUBDIRECTORY(test)
 endif(BUILD_TESTING)

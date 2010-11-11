@@ -28,5 +28,3 @@ MACRO(CXXTEST_ADD_TEST _cxxtest_testname _cxxtest_outfname)
     
     MESSAGE(STATUS "HEY THERE!")
 ENDMACRO(CXXTEST_ADD_TEST)
-
-ENABLE_TESTING()
