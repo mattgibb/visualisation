@@ -88,6 +88,11 @@ public:
 
   /** Writes the data to disk from the memory buffer provided. */
   virtual void Write(const void *buffer);
+  
+  /** Convenient method to write a buffer as ASCII text, one entry per line. */
+  void WriteBufferAsVoxFormat(std::ostream & os, const void *buffer,
+                          IOComponentType ctype,
+                          SizeType numberOfBytesToWrite);  
 
 protected:
   VoxImageIO();

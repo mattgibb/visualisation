@@ -166,7 +166,6 @@ void VoxImageIO::ReadImageInformation()
   m_Dimensions.clear();
   m_Spacing.clear();
   
-  
   // Open the file
   this->OpenFileForReading(file);
   
@@ -207,7 +206,7 @@ void VoxImageIO::Read(void *buffer)
   // Open the file
   this->OpenFileForReading(file);
   this->ComputeStrides();
-
+  
   // Offset into file
   unsigned long streamStart = this->GetHeaderSize();
   file.seekg( (long)streamStart, std::ios::beg );
@@ -284,10 +283,15 @@ void VoxImageIO::Write(const void *buffer)
   
   // Open the file
   this->OpenFileForWriting(file);
-
+  
   // Set up for reading
   this->ComputeStrides();
 
+  for(unsigned int i=0; i<m_Strides.size(); i++)
+  {
+    std::cout << "m_Strides[" << i << "]: " << m_Strides[i] << std::endl;
+  }
+  
   // Write the header
   file << this->GetDimensions(0) << " "
        << this->GetDimensions(1) << " "
@@ -295,17 +299,124 @@ void VoxImageIO::Write(const void *buffer)
 	file << this->GetSpacing(0)    << " "
 	     << this->GetSpacing(1)    << " "
 	     << this->GetSpacing(2)    << "\n";
-
-  // Write the body
-  const char *buf = reinterpret_cast< const char * >( buffer );
-  long num = this->GetImageSizeInBytes();
   
-  for ( ImageIOBase::SizeType i = 0; i < num; i++ )
-  {
-    file << buf++ << "\n";
-  }
+  // Write the body
+  this->WriteBufferAsVoxFormat( file, buffer, this->GetComponentType(), this->GetImageSizeInComponents() );
+  
+  std::cout << "this->GetImageSizeInBytes(): " << this->GetImageSizeInBytes() << std::endl;
+  std::cout << "this->GetImageSizeInComponents(): " << this->GetImageSizeInComponents() << std::endl;
+  std::cout << "this->GetImageSizeInPixels(): " << this->GetImageSizeInPixels() << std::endl;
+  std::cout << "this->GetComponentType(): " << this->GetComponentType() << std::endl;
+  std::cout << "this->GetComponentTypeAsString(this->GetComponentType()): " << this->GetComponentTypeAsString(this->GetComponentType()) << std::endl;
   
   file.close();
 }
+
+// similar to itk::ImageIOBase::WriteBuffer, but doesn't write 6 numbers per line.
+template< class TComponent >
+void WriteBufferOnePerLine(std::ostream & os, const TComponent *buffer, ImageIOBase::SizeType num)
+{
+  const TComponent *ptr = buffer;
+
+  typedef typename itk::NumericTraits< TComponent >::PrintType PrintType;
+  for ( ImageIOBase::SizeType i = 0; i < num; i++ )
+    {
+    os << PrintType(*ptr++) << "\n";
+    }
+}
+
+// similar to itk::ImageIOBase::WriteBufferAsASCII, but uses WriteBufferOnePerLine instead of WriteBuffer.
+// can't override ImageIOBase::WriteBufferAsASCII, as it's not virtual.
+// Loads of boilerplate, if anyone has a better way of doing this, please do!
+void VoxImageIO::WriteBufferAsVoxFormat(std::ostream & os, const void *buffer,
+                                         IOComponentType ctype,
+                                         ImageIOBase::SizeType numComp)
+{
+  switch ( ctype )
+    {
+    case UCHAR:
+      {
+      typedef const unsigned char *Type;
+      Type buf = reinterpret_cast< Type >( buffer );
+      WriteBufferOnePerLine(os, buf, numComp);
+      }
+      break;
+    case CHAR:
+      {
+      typedef const char *Type;
+      Type buf = reinterpret_cast< Type >( buffer );
+      WriteBufferOnePerLine(os, buf, numComp);
+      }
+      break;
+
+    case USHORT:
+      {
+      typedef const unsigned short *Type;
+      Type buf = reinterpret_cast< Type >( buffer );
+      WriteBufferOnePerLine(os, buf, numComp);
+      }
+      break;
+
+    case SHORT:
+      {
+      typedef const short *Type;
+      Type buf = reinterpret_cast< Type >( buffer );
+      WriteBufferOnePerLine(os, buf, numComp);
+      }
+      break;
+
+    case UINT:
+      {
+      typedef const unsigned int *Type;
+      Type buf = reinterpret_cast< Type >( buffer );
+      WriteBufferOnePerLine(os, buf, numComp);
+      }
+      break;
+
+    case INT:
+      {
+      typedef const int *Type;
+      Type buf = reinterpret_cast< Type >( buffer );
+      WriteBufferOnePerLine(os, buf, numComp);
+      }
+      break;
+
+    case ULONG:
+      {
+      typedef const unsigned long *Type;
+      Type buf = reinterpret_cast< Type >( buffer );
+      WriteBufferOnePerLine(os, buf, numComp);
+      }
+      break;
+
+    case LONG:
+      {
+      typedef const long *Type;
+      Type buf = reinterpret_cast< Type >( buffer );
+      WriteBufferOnePerLine(os, buf, numComp);
+      }
+      break;
+
+    case FLOAT:
+      {
+      typedef const float *Type;
+      Type buf = reinterpret_cast< Type >( buffer );
+      WriteBufferOnePerLine(os, buf, numComp);
+      }
+      break;
+
+    case DOUBLE:
+      {
+      typedef const double *Type;
+      Type buf = reinterpret_cast< Type >( buffer );
+      WriteBufferOnePerLine(os, buf, numComp);
+      }
+      break;
+
+    default:
+      break;
+    }
+}
+
 } // namespace itk
 #endif
