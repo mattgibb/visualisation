@@ -5,7 +5,17 @@ Here you will find code, data and examples related to the talk. PLEASE say, send
 SETUP AND DEPENDENCIES:
 Many of the dependencies are optional. Often the easiest way to install is to use your favourite package manager e.g. aptitude, yum, MacPorts. Alternatively, download the source from the websites and follow the instructions for installation.
 
-This code can be downloaded in zip or tar format from github.com/mattgibb/visualisation, but if you would like to keep up to date with the latest version easily, or to contribute a patch or extra tools and materials, you will need to install git (http://git-scm.com/). Further instructions will on the wiki at github.com/mattgibb/visualisation.
+This code can be downloaded in zip or tar format from github.com/mattgibb/visualisation, but if you would like to keep up to date with the latest version easily, or to contribute a patch or extra tools and materials, you will need to install git (http://git-scm.com/). Just change into a suitable directory and type:
+
+git clone git://github.com/mattgibb/visualisation.git
+
+This will make a directory in your current directory called 'visualisation' containing the project. To update to the latest version, just change into the 'visualisation' directory and type:
+
+git pull
+
+It should update with the latest version from GitHub.
+
+Further instructions will on the wiki at github.com/mattgibb/visualisation.
 
 For the file converter, you will need to install:
 
