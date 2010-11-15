@@ -53,11 +53,8 @@ int main(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName( vm["input"].as<std::string>()  );
+  writer->SetFileName( vm["output"].as<std::string>() );
 
   writer->SetInput( reader->GetOutput() );
   
