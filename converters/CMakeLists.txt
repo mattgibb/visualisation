@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.2)
 
-PROJECT(FILE_CONVERTER)
+PROJECT(CONVERTERS)
 
 # Find Boost and add include dirs
 FIND_PACKAGE(Boost COMPONENTS program_options REQUIRED)
