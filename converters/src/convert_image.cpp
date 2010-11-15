@@ -63,8 +63,9 @@ int main(int argc, char * argv[])
   
   try
     {
-    cout << "Reading...\n";
+    cout << "Reading...";
     reader->Update();
+    cout << "done\n";
     }
   catch( itk::ExceptionObject & err )
     {
@@ -75,8 +76,9 @@ int main(int argc, char * argv[])
   
   try 
     { 
-    cout << "Writing...\n";
+    cout << "Writing...";
     writer->Update(); 
+    cout << "done\n";
     } 
   catch( itk::ExceptionObject & err ) 
     { 

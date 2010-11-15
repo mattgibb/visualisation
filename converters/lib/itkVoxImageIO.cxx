@@ -171,11 +171,9 @@ void VoxImageIO::ReadImageInformation()
   
   // initialise m_Dimensions and m_Spacing
   SizeValueType size;
-  std::cout << "Before m_Dimensions, file.tellg(): " << file.tellg() << std::endl;
   for (unsigned int i=0; i<3; i++)
   {
     file >> size;
-    std::cout << "In m_Dimensions, i = " << i << ", file.tellg(): " << file.tellg() << std::endl;
     m_Dimensions.push_back(size);
   }
   
@@ -183,18 +181,8 @@ void VoxImageIO::ReadImageInformation()
   for (unsigned int i=0; i<3; i++)
   {
     file >> spacing;
-    std::cout << "In m_Spacing, i = " << i << ", file.tellg(): " << file.tellg() << std::endl;
     m_Spacing.push_back(spacing);
   }
-  
-  for (unsigned int i=0; i<3; i++)
-  {
-    std::cout << "m_Dimensions[" << i << "]: " << m_Dimensions[i] << std::endl;
-    std::cout << "m_Spacing[" << i << "]: " << m_Spacing[i] << std::endl;
-  }
-  
-  std::cout << "m_Dimensions.size(): " << m_Dimensions.size() << std::endl;
-  std::cout << "m_Spacing.size(): " << m_Spacing.size() << std::endl;
   
   file.close();
 }
@@ -286,11 +274,6 @@ void VoxImageIO::Write(const void *buffer)
   
   // Set up for reading
   this->ComputeStrides();
-
-  for(unsigned int i=0; i<m_Strides.size(); i++)
-  {
-    std::cout << "m_Strides[" << i << "]: " << m_Strides[i] << std::endl;
-  }
   
   // Write the header
   file << this->GetDimensions(0) << " "
@@ -302,12 +285,6 @@ void VoxImageIO::Write(const void *buffer)
   
   // Write the body
   this->WriteBufferAsVoxFormat( file, buffer, this->GetComponentType(), this->GetImageSizeInComponents() );
-  
-  std::cout << "this->GetImageSizeInBytes(): " << this->GetImageSizeInBytes() << std::endl;
-  std::cout << "this->GetImageSizeInComponents(): " << this->GetImageSizeInComponents() << std::endl;
-  std::cout << "this->GetImageSizeInPixels(): " << this->GetImageSizeInPixels() << std::endl;
-  std::cout << "this->GetComponentType(): " << this->GetComponentType() << std::endl;
-  std::cout << "this->GetComponentTypeAsString(this->GetComponentType()): " << this->GetComponentTypeAsString(this->GetComponentType()) << std::endl;
   
   file.close();
 }
