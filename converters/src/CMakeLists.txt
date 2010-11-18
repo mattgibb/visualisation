@@ -1,6 +1,3 @@
-# add current directory to include path
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
 # cheeky little shortcut if a group of things are needed.
 # sets the varable VTKLibs to the rest of the arguments.
 SET(VTKLibs vtkRendering vtkGraphics vtkHybrid vtkImaging vtkIO vtkFiltering vtkCommon)

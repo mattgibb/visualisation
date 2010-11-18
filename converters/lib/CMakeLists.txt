@@ -1,6 +1,3 @@
-# add current directory to include path
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
 SET(VOXIO_SRCS itkVoxImageIO.cxx itkVoxImageIOFactory.cxx)
 
 ADD_LIBRARY(VOXIO ${VOXIO_SRCS})

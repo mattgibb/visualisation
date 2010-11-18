@@ -34,7 +34,7 @@ ccmake ..
 
 This will generate build files for you in an interactive way. If nothing goes wrong, you should be able simply to press 'c' for configure a couple of times, then 'g' for generate. The instructions are at the bottom of the screen anyway. You might need to tell it where VTK or Boost is installed if you've installed them in a non-standard location for your OS.
 
-Once the makefiles are generated, just type make et voilà! The tools are built. You'll find them in converters/build/src. We hope they are straightforward to use, just run them with the '--help' option to find out how. If it's not clear, ask, then if you wouldn't mind, add instructions to the wiki or to this file for the next person :-)
+Once the makefiles are generated, just type make et voilà! The tools are built. You'll find them in converters/build/bin. We hope they are straightforward to use, just run them with the '--help' option to find out how. If it's not clear, ask, then if you wouldn't mind, add instructions to the wiki or to this file for the next person :-)
 
 SHARED LIBRARIES AND PLUGINS:
 Found in converters/build/lib

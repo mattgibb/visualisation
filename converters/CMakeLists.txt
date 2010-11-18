@@ -14,7 +14,8 @@ INCLUDE(${ITK_USE_FILE})
 
 ADD_SUBDIRECTORY(lib)
 
-ADD_SUBDIRECTORY(src)
+# Execute ${PROJECT_SOURCE_DIR}/src/CMakeLists.txt, and put outputs in ${PROJECT_BUILD_DIR}/bin
+ADD_SUBDIRECTORY(src bin)
 
 # Testing stuff
 OPTION(BUILD_TESTING "Set this to build and run the testing framework")
