@@ -183,6 +183,8 @@ void VoxImageIO::ReadImageInformation()
     m_Spacing.push_back(spacing);
   }
   
+  this->SetComponentType(UCHAR);
+
   file.close();
 }
 
