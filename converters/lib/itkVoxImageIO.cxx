@@ -8,7 +8,6 @@ VoxImageIO::VoxImageIO():
   ImageIOBase()
 {
   this->SetNumberOfComponents(1);
-  this->SetPixelTypeInfo( typeid( char ) );
   this->SetNumberOfDimensions(3);
 
   for ( unsigned int idx = 0; idx < 3; ++idx )
