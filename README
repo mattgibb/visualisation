@@ -37,8 +37,11 @@ This will generate build files for you in an interactive way. If nothing goes wr
 Once the makefiles are generated, just type make et voilà! The tools are built. You'll find them in converters/build/bin. We hope they are straightforward to use, just run them with the '--help' option to find out how. If it's not clear, ask, then if you wouldn't mind, add instructions to the wiki or to this file for the next person :-)
 
 SHARED LIBRARIES AND PLUGINS:
-Found in converters/build/lib
-TODO: Expand on this.
+In order to enable all your ITK programs to read and write vox files, you need to point them towards your shiny new VoxIO plugin. Set the environment variable ITK_AUTOLOAD_PATH to the lib directory where you've built the converters, e.g.:
+
+export ITK_AUTOLOAD_PATH=/path/to/this/project/converters/build/lib
+
+
 
 RUNNING TESTS:
 To run the tests, change into 'converters/build' and type 'make test'. All the tests should pass...
