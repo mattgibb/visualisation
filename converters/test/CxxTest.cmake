@@ -1,5 +1,5 @@
 # set root of cxxtest tree and add it to include directories
-SET(CXXTEST_INCLUDE_DIR "${FILE_CONVERTER_SOURCE_DIR}/../cxxtest")
+SET(CXXTEST_INCLUDE_DIR "${CONVERTERS_SOURCE_DIR}/../cxxtest")
 INCLUDE_DIRECTORIES(${CXXTEST_INCLUDE_DIR})
 
 # test generator
@@ -26,5 +26,4 @@ MACRO(CXXTEST_ADD_TEST _cxxtest_testname _cxxtest_outfname)
     # run compiled test
     ADD_TEST(${_cxxtest_testname} ${CMAKE_CURRENT_BINARY_DIR}/${_cxxtest_testname})
     
-    MESSAGE(STATUS "HEY THERE!")
 ENDMACRO(CXXTEST_ADD_TEST)
