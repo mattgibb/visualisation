@@ -20,6 +20,7 @@ MACRO(CXXTEST_ADD_TEST _cxxtest_testname _cxxtest_outfname)
     )
 
     SET_SOURCE_FILES_PROPERTIES(${_cxxtest_real_outfname} PROPERTIES GENERATED true)
+    
     #compile test file
     ADD_EXECUTABLE(${_cxxtest_testname} ${_cxxtest_real_outfname})
     

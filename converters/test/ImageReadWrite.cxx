@@ -30,10 +30,10 @@
 int main( int argc, char ** argv )
 {
   // Verify the number of parameters in the command line
-  if( argc < 3 )
+  if( argc != 3 )
     {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << " inputImageFile  outputImageFile " << std::endl;
+    std::cerr << argv[0] << " inputImageFile outputImageFile " << std::endl;
     return EXIT_FAILURE;
     }
 
