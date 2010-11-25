@@ -16,6 +16,12 @@ ADD_TEST(convert_image
          ${DATA_ROOT}/input.vox
          ${TEMP}/output.vox
         )
+        
+ADD_TEST(convert_image_output
+         diff
+         ${DATA_ROOT}/input.vox
+         ${TEMP}/output.vox
+         )
 
 ADD_TEST(plugin_read_image
          ${EXECUTABLE_OUTPUT_PATH}/ImageReadWrite
