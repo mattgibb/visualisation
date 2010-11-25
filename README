@@ -37,11 +37,11 @@ This will generate build files for you in an interactive way. If nothing goes wr
 Once the makefiles are generated, just type make et voilà! The tools are built. You'll find them in converters/build/bin. We hope they are straightforward to use, just run them with the '--help' option to find out how. If it's not clear, ask, then if you wouldn't mind, add instructions to the wiki or to this file for the next person :-)
 
 SHARED LIBRARIES AND PLUGINS:
-In order to enable all your ITK programs to read and write vox files, you need to point them towards your shiny new VoxIO plugin. Set the environment variable ITK_AUTOLOAD_PATH to the lib directory where you've built the converters, e.g.:
+In order to enable all your ITK programs to read and write vox files, you'll need to turn on the BUILD_SHARED_LIBS option in your ITK build. You can set this through the ccmake interface you used when you compiled ITK.
+
+You'll also need to point your apps towards your shiny new VoxIO plugin. Set the environment variable ITK_AUTOLOAD_PATH to the lib directory where you've built the converters, e.g.:
 
 export ITK_AUTOLOAD_PATH=/path/to/this/project/converters/build/lib
 
-
-
 RUNNING TESTS:
-To run the tests, change into 'converters/build' and type 'make test'. All the tests should pass...
+To run the tests, change into 'converters/build' and type 'make test'. The first two tests, convert_image and convert_image_output, should pass if everything has compiled properly and the converters work. The next three tests should pass if the plugin mechanism has been set up correctly (see SHARED LIBRARIES AND PLUGINS above).
