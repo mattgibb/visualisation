@@ -38,7 +38,7 @@ int main( int argc, char ** argv )
   itk::RandomImageSource<ImageType>::Pointer random;
   random = itk::RandomImageSource<ImageType>::New();
   random->SetMin(0);
-  random->SetMax(24680);
+  random->SetMax(255);
   random->SetSize(size);
 
   // Create a mapper (in this case a writer). A mapper
@@ -82,6 +82,7 @@ int main( int argc, char ** argv )
   ImageIteratorType ot( random->GetOutput(),
                         random->GetOutput()->GetBufferedRegion() );
 
+  
   it.GoToBegin();
   ot.GoToBegin();
   while( !it.IsAtEnd() )
@@ -110,7 +111,7 @@ int main( int argc, char ** argv )
     }
   catch( itk::ExceptionObject & excp )
     {
-    std::cerr << "Error while writing the image " << argv[2] << std::endl;
+    std::cerr << "Error while writing the image " << vox2 << std::endl;
     std::cerr << excp << std::endl;
     }
 

@@ -34,8 +34,8 @@ TARGET_LINK_LIBRARIES(ImageIO ITKIO)
 
 ADD_TEST(plugin_write_read_write
          ${CURRENT_BINARY_DIR}/ImageIO
-         ${DATA_ROOT}/input.vox
-         ${TEMP}/read_write_image.mhd
+         ${TEMP}/random_output.vox
+         ${TEMP}/random_output2.mhd
         )
         
 # enable dashboard scripting
